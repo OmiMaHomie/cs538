@@ -1,0 +1,7 @@
+lib
+                proc \subname{ots.attack}^\Sigma (\msg)
+                    \key \getrandom \Scheme.\K
+                    \ctext := \Scheme.\Enc(\key,\msg)
+                    return $\ctext$
+            end
+    

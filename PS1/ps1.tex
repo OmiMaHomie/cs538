@@ -1,0 +1,329 @@
+\documentclass[12pt]{article}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newif\ifsol
+\soltrue
+
+\include{macros}
+
+\lstset{
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue},
+    literate={\\}{{\textbackslash}}1
+}
+
+
+\begin{document}
+\begin{center}
+\Large{\textbf{CAS CS 538.  \ifsol Solutions to \fi Problem Set 1}}\\
+\smallskip
+\large{\textbf{Due electronically via gradescope, Monday January 26, 2026 11:59pm
+}}\\
+\large{\textbf{Om Khadka, U51801771}}
+\end{center}
+
+\ifsol
+\else
+\noindent
+\textbf{How to submit:} 
+Gradescope (accessible by logging into \url{https://www.gradescope.com/} with your BU credentials) should already have our class list; however, if you are not in the gradescope class list, use entry code G675B7 to add yourself to the class. 
+
+We expect you to submit a solutions pdf. Don't forget to select the pages for each problem in Gradescope.
+
+\medskip \noindent
+\textbf{Why type up your solutions:} The quality of typed up solutions is generally higher than the quality of handwritten ones, because you are able to edit your solutions and improve them as you write. It is okay to use any document creation system you want, as many of them now support inserting math. 
+
+\medskip \noindent
+\textbf{Using \LaTeX}. We highly recommend learning \LaTeX\ to make it easier to write up your solutions.  We will provide source files for each problem set. \LaTeX\ is like a programming language, but for producing documents. Just like there are many environments for producing Java or Python or C programs, there are many environments you can use to produce \LaTeX. You should choose one.  If you want to work in the cloud through your browser, we recommend \href{https://crixet.com/}{Crixet} or \href{https://overleaf.com}{Overleaf}. If you want to have a local installation, this page \url{https://www.latex-project.org/get/} tells you how to install \LaTeX.  For local installations, consider recommend MacTeX for a Mac and MiKTeX for Windows. There are many good editors; I like TeXShop for Mac. TeXstudio and TeXworks are also good options, available for different operating systems. VS Code also supports \LaTeX. Search the web for ``getting started with Latex'' if these pointers are not enough. It is okay to hand-draw diagrams to insert into \LaTeX. 
+
+\medskip\noindent
+\textbf{If you prefer to handwrite:} 
+If you handwrite your solutions, please use the Gradescope app to scan and submit, per instructions at {\tiny \url{https://guides.gradescope.com/hc/en-us/articles/22016028459789-Using-the-Gradescope-Mobile-App-for-Students}}.
+ \medskip
+ 
+ 
+ 
+\medskip\noindent\textbf{How to Approach the Problem Sets}
+The best way to tackle the problem sets is to do them over time rather than once a week. You wouldn't starve for six days and then attempt to consume your weekly calorie needs on the seventh. Similarly, don't deprive your brain of thinking about CS 538 for six days and then attempt to solve the problem set on the seventh.
+
+Discussions help you start the problem set. Every homework problem relates to something we covered; if unsure how to start, look through what we covered in the last few lectures.
+
+We encourage you to work with others, subject to limitations of the collaboration policy below. We also encourage you to come to office hours (see the schedule in a pinned Piazza post), where you can work with others with the help of the course staff.
+\newpage
+ 
+ \fi
+
+
+\begin{problem} (30 points)
+
+Bob is using the one-time-pad to encrypt a message he sends to Alice. The message is either 
+\begin{itemize}
+\item $\msg_0$ = \texttt{Let's meet at 2.} or 
+\item $\msg_1$ = \texttt{Let's meet at 5.}
+\end{itemize}
+Note that each of these messages has 16 characters in it.
+Bob converts his message to bytes using ASCII (or UTF-8) encoding with one byte per character, to get 128 bits. He then encrypts the message with the secret key $\key$ that only he and Alice know.
+
+An attacker Marlow intercepts the ciphertext $\ctext$ (think of Marlow as being a router between Bob and Alice). 
+Because the one-time pad has one-time secrecy, Marlow cannot understand the message. 
+But, unlike the attacker we discussed in class, Marlow has an additional power: he can modify the ciphertext $\ctext$ to get some $\ctext'$ and then send $\ctext'$ to Alice. 
+Marlow's goal is to get Alice to show up to the meeting at the wrong time. Show how, without knowing whether Bob sent $\msg_0$ and $\msg_1$, Marlow can ensure that Alice decrypts $\ctext'$ to the other message. 
+\end{problem}
+
+\begin{solution}
+The solution to this problem comes from the ability that one can \textbf{modify} the end result of the OTP (otherwise known as malleability). \\
+
+For the OTP:
+\begin{itemize}
+  \item $\text{Enc: } c = k \oplus m$
+  \item $\text{Dec: } m = k \oplus c$
+\end{itemize}
+Where $k$ is the 128-bit key, $m$ is the 128-bit msg, and $c$ is the 128-bit ciphertext. \\
+
+The only 2 possible msgs differ in just 1 character ():
+\begin{itemize}
+  \item Let's meet at \textbf{2}.
+  \item Let's meet at \textbf{5}.
+\end{itemize}
+So we can just look at these singular bytes (in ASCII).
+\begin{itemize}
+  \item $2 \rightarrow \text{ASCII 50 (or }00110010)$
+  \item $5   \rightarrow \text{ASCII 53 (or } 00110101)$
+\end{itemize}
+
+\newpage
+
+We can now take the XOR of these values:
+\begin{equation*}
+  50 \oplus 53 = 00000111_2 = 7
+\end{equation*}
+So the product is just 0x07 (in hexa). We can also see from this how only the first 3 bits differ from the messages.\\
+
+Now we can go ahead with making the atk. \\
+
+Marlow will compute:
+\begin{equation*}
+  \delta = \msg_0 \oplus \msg_1
+\end{equation*}
+
+Since the msgs are identical expect for the numerical digit, $\delta$ will then be a 128-bit val with:
+\begin{itemize}
+  \item 15 bytes of 0's (1-14, 16).
+  \item @ position 15, 0x07
+  \item All other bits are 0's
+\end{itemize}
+
+Now, when Marlow intercepts $c$, he will then compute:
+\begin{equation*}
+  c' = c \oplus \delta
+\end{equation*}
+
+I can show both cases to show why this works:
+\begin{itemize}
+  \item If Bob sent $\msg_0$, \\
+        $c = k \oplus \msg_0$ \\
+        $c' = c \oplus \delta = (k \oplus \msg_0) \oplus \delta$\\
+        So Alice will decrpyt: $k \oplus c' = k \oplus (k \oplus \msg_0 \oplus \delta) = \msg_0 \oplus \delta = \msg_0 \oplus (\msg_0 \oplus \msg_1) = \msg_1$
+  \item If Bob sent $\msg_1$, \\
+        $c = k \oplus \msg_1$ \\
+        $c' = c \oplus \delta = (k \oplus \msg_1) \oplus \delta$ \\
+        So Alice decrpyts: $k \oplus c' = k \oplus (k \oplus \msg_1 \oplus \delta) = \msg_1 \oplus \delta = \msg_1 \oplus (\msg_0 \oplus \msg_1) = \msg_0$
+\end{itemize}
+
+Thusly, this proves how Marlow can modify and sent the incorrect message to Alice, without having to know $k$ or which message Bob even sent.
+\end{solution}
+
+
+
+\begin{problem} (40 points, at 20 for each part)
+    Alice is using one-time-pad and notices that when her key is the all-zero string $0^L$, then $\Enc(\key,\msg) = \msg$ and her message is sent in the clear! 
+    To avoid this problem, she modifies the scheme to sample keys uniformly from $\K = \left\{0,1 \right\}^L - \left\{ 0^L \right\}$, the set of all $L$-bit strings except the all-zero string. 
+    Before we post the actual questions, we need to recall a definition.
+
+\begin{mybox}
+\begin{definition}[Textbook, Claim 1.4.1, generalized]{(One-Time Secrecy)}
+    \label{def:ots} 
+    An encryption scheme \newline $\Scheme = (\Enc, \Dec, \K, \M, \C)$ has \textbf{one-time secrecy} if for all choices of plaintext $\msg \in \M$, the ciphertext \newline $\ctext := \Enc(\key, \msg)$ is uniformly distributed in the ciphertext space $\C$, when the key $\key$ is sampled uniformly and used for only one encryption.
+    
+    \noindent \newline Equivalently, we can express this as an attack game. Note that the scheme being attacked is in the superscript and the input message is, as usual, in parentheses. 
+    \begin{center}
+      \begin{mybox}
+        $\begin{array}{l}
+          \mathtt{ots.attack}^\Sigma (M): \\
+          \hline
+          \quad \quad K \gets \Scheme.\K \\
+          \quad \quad C := \Scheme.\Enc(K,M) \\
+          \quad \quad \text{return } C
+        \end{array}$
+      \end{mybox}    
+    \end{center}
+    Then we say $\Scheme$ has \textbf{one-time secrecy} if for any arbitrary message $\msg \in \Scheme.\M$ and ciphertext $\ctext \in \Scheme.\C$, 
+    $$\Pr[\attack^\Scheme(\msg) = \ctext] = \frac{1}{|\C|}$$
+\end{definition}
+\end{mybox}
+
+
+
+\begin{mybox}
+  \begin{remark}
+    \label{remark:rem1}
+    There are multiple ways to rewrite Definition~\ref{def:ots}, because there are many ways to say ``the output of $\attack$ is uniformly distributed.''  We do so now.
+    
+     Then Definition~\ref{def:ots} is equivalent to saying that for any message $\msg$,
+    {\small 
+    \begin{align*}
+      \Pr[\attack^\Scheme(\msg) = \ctext] &= \Pr_{\key \getrandom \Scheme.\K}[\Enc(\key, \msg) = \ctext] & \mbox{Note the subscript notation $\getrandom$ for sampling}\\
+      &= \Pr[\Enc(\randk, \msg) = \ctext]& \mbox{(where $\randk$ is uniformly distributed over $\K$)} \\
+      & = \sum_{\key \in \K} \Pr[\Enc(\key, \msg) = \ctext]\cdot \Pr[\randk = \key] & \mbox{(by total probability)}
+    \end{align*}}
+    
+  \noindent Note that if $\Enc(\key,\msg)$ is a deterministic algorithm (which it does not have to be!), then $ \Pr[\Enc(\key, \msg) = \ctext]$ is either 0 or 1.
+  \end{remark}
+\end{mybox}
+
+\begin{ppart}
+    Prove that this scheme does {\it not} have one-time secrecy as defined in Definition~\ref{def:ots}.
+
+
+\begin{solution}
+  The solution to this problem comes from the fact that, even if we just \textit{slighty} change the probabilites to not be uniform, it will break the entire shceme.\\
+  
+  So firstly, recall the scheme, $\Sigma = (\Enc, \Dec, \K, \M, \C)$:
+  \begin{itemize}
+  \item $\K = {0,1}^L \setminus {0^L}$ (all $L$-bit strings except that one all-zero string),
+  \item $\M = \C = {0,1}^L$,
+  \item $\Enc(k, m) = k \oplus m$,
+  \item $\Dec(k, c) = k \oplus c$.
+  \end{itemize}
+
+  Looking back at the Definition~\ref{def:ots}, $\Sigma$ has OTS IFF for every message $\msg \in \M$ and every ciphertext $\ctext \in \C$,
+  \begin{equation*}
+    \Pr[\attack^\Sigma(\msg) = \ctext] = \frac{1}{|\C|}
+  \end{equation*}
+  where $\attack^\Sigma(\msg)$ takes some key $\key$ uniformly from $\K$, computes $\ctext = \Enc(\key, \msg)$, and outputs $\ctext$. \\
+
+  I can show that this equality will fail from a specific case of $\msg$ and $\ctext$. Let $\msg$ be any msg in $\M$ (you could also consider it as taking $\msg = 0^L$ for more concreteness, but any $\msg$ works). Now consider the ciphertext $\ctext = \msg$. Then:
+  \begin{equation*}
+    \Pr[\attack^\Sigma(\msg) = \msg] = \Pr_{\key \gets \K}[\Enc(\key, \msg) = \msg] = \Pr_{\key \gets \K}[\key \oplus \msg = \msg] = \Pr_{\key \gets \K}[\key = 0^L].
+  \end{equation*}
+  And since $0^L \notin \K$, this probability is $0$. But, $|\C| = 2^L$, so $\frac{1}{|\C|} = \frac{1}{2^L} > 0$. Thus,
+  \begin{equation*}
+    \Pr[\attack^\Sigma(\msg) = \msg] = 0 \neq \frac{1}{2^L}.
+  \end{equation*}
+  Thusly, this shows how the scheme does not have OTS.
+\end{solution}
+ \end{ppart}
+ 
+ 
+\begin{mybox}
+    \begin{remark}
+        \label{remark:rem2}
+        Demanding that the ciphertext distribution is uniform, regardless of the message, is a bit stronger than we need for secrecy. Even if the ciphertext distribution is not uniform (i.e., some ciphertexts are more likely than others), secrecy is assured as long as the distribution is the same for every $\msg$. So one could consider the following, weaker, definition, which is commonly known as ``Shannon secrecy'' (after Claude Shannon, who first stated it in 1948) or ``perfect secrecy.'' Here it is, in different, equivalent, formulations.
+ \begin{definition}
+ \label{def:shannon}
+   An encryption scheme \newline $\Scheme = (\Enc, \Dec, \K, \M, \C)$ has \textbf{Shannon secrecy} if the following, equivalent, statements hold:
+\begin{itemize}
+ \item The output distribution of $\attack^\Scheme(\msg)$ is the same regardless of which $\msg\in M$ is given as input 
+\item (Unwrapping what ``regardless of which $\msg\in\M$'' means):  $\forall \msg_0, \msg_1 \in \M$
+\[
+\mbox{ the output distribution of $\attack^\Scheme(\msg_0)$ is the same as the output distribution of $\attack^\Scheme(\msg_1)$}.
+\] 
+\item (Unwrapping what ``same distribution'' means):  $\forall \msg_0, \msg_1 \in \M$,  $\forall \ctext\in\C$,  
+\[
+ \Pr[\attack^\Scheme(\msg_0) = \ctext]= \Pr[\attack^\Scheme(\msg_1) = \ctext]\,.
+\]
+
+\item (Unwrapping what ``$\attack$'' means): If $\randk$ is uniformly distributed over $\K$,  then $\forall \msg_0, \msg_1 \in \M$,  $\forall \ctext\in\C$,
+\[
+\Pr[\Enc(\randk, \msg_0)=\ctext] 
+            = \Pr[\Enc(\randk, \msg_1)=\ctext]\,.
+\]
+ \end{itemize}
+ \end{definition}
+    \end{remark}
+\end{mybox}
+
+\begin{ppart}
+Prove that this scheme does \emph{not} have Shannon secrecy as defined in Definition~\ref{def:shannon}.
+\end{ppart}
+
+\begin{solution}
+  The way we can show how this scheme doesn't have Shannon secrecy is through the fact that the probability distribution of the ciphertexts literally depend on the msg itself (as we basically can't have an all-0 message), causing a contradiction in the scheme.\\
+
+Recall the scheme $\Sigma$, and the definitions of each of its parameters. Looking at Definition~\ref{def:shannon}, $\Sigma$ has Shannon secrecy IFF for every pair of messages $\msg_0, \msg_1 \in \M$ and every ciphertext $\ctext \in \C$,
+\begin{equation*}
+  \Pr[\Enc(\randk, \msg_0) = \ctext] = \Pr[\Enc(\randk, \msg_1) = \ctext],
+\end{equation*}
+where $\randk$ is uniformly distributed over $\K$. \\
+
+I will show a case where this equality will fail. Let $\msg_0$ and $\msg_1$ be two distinct messages in $\M$ (you can say that $\msg_0 = 0^L$ and $\msg_1 = 0^{L-1}1$, but really any two distinct messages work). Consider the ciphertext $\ctext = \msg_0$. \\
+
+For any message $\msg$ and ciphertext $\ctext$, since $\Enc(k, \msg) = k \oplus \msg$, we have:
+\begin{equation*}
+  \Pr[\Enc(\randk, \msg) = \ctext] = \Pr[\randk = \ctext \oplus \msg].
+\end{equation*}
+Because $\randk$ is uniform over $\K$, this probability is $1/(2^L - 1)$ if $\ctext \oplus \msg \in \K$ (i.e., $\ctext \oplus \msg \neq 0^L$), and $0$ otherwise. \\
+
+Now we can compute for $\msg_0$ and $\ctext = \msg_0$:
+\begin{equation*}
+  \Pr[\Enc(\randk, \msg_0) = \msg_0] = \Pr[\randk = \msg_0 \oplus \msg_0] = \Pr[\randk = 0^L] = 0,
+\end{equation*}
+since $0^L \notin \K$.
+
+For the same $\ctext = \msg_0$ but with message $\msg_1 \neq \msg_0$:
+\begin{equation*}
+  \Pr[\Enc(\randk, \msg_1) = \msg_0] = \Pr[\randk = \msg_0 \oplus \msg_1].
+\end{equation*}
+Since $\msg_0 \neq \msg_1$, we have $\msg_0 \oplus \msg_1 \neq 0^L$, hence $\msg_0 \oplus \msg_1 \in \K$. Therefore,
+\begin{equation*}
+  \Pr[\Enc(\randk, \msg_1) = \msg_0] = \frac{1}{2^L - 1}.
+\end{equation*}
+And thusly,
+\begin{equation*}
+  \Pr[\Enc(\randk, \msg_0) = \msg_0] = 0 \neq \frac{1}{2^L - 1} = \Pr[\Enc(\randk, \msg_1) = \msg_0],
+\end{equation*} \\
+
+This contradicts the condition we need for Shannon secrecy, and therefore shows how this function does not have Shannon secrecy.
+\end{solution}
+\end{problem}
+
+\newpage
+
+\begin{problem} (30 points)
+\newcommand{\new}{\mathrm{new}}
+Let $\Scheme = (\Enc,\Dec, \K, \M, \C)$ be any one-time secure cipher scheme with $\K =\M$. Suppose Alice and Bob both know a key $\key_1\in \K$.
+
+Now Alice encrypts a fresh random key $\key_2$ with $\Enc$ to create a ciphertext $\ctext_1$. She then encrypts $\msg$ with $\Enc$ using this fresh random key $\key_2$ to create a ciphertext $\ctext_2$. She gives $\ctext_2$ to Charlie and $\ctext_1$ to Bob. Bob and Charlie have to work together in order to decrypt.
+
+\begin{ppart} (5 points)
+Describe what Bob and Charlie need to compute in order to decrypt $\msg$.
+\end{ppart}
+
+
+\begin{solution}
+To decrypt the message $\msg$, Bob and Charlie has to do the following:
+\begin{itemize}
+  \item Using the shared key $\key_1$, Bob will decrypt the ciphertext $\ctext_1$ to get the fresh key $\key_2$: \\
+        \begin{equation*}
+          \key_2 = \Dec(\key_1, \ctext_1).
+        \end{equation*}
+  \item Bob will then send $\key_2$ to Charlie.
+  \item Finally, using the key $\key_2$ received from Bob, Charlie decrypts the ciphertext $\ctext_2$ to recover the original msg: \\
+        \begin{equation*}
+          \msg = \Dec(\key_2, \ctext_2).
+        \end{equation*}
+\end{itemize}
+\end{solution}
+
+\begin{ppart} (25 points)
+Let us know formalize what Alice does. Let $\Sigma_\new = (\Enc_\new,\Dec_\new, \K_\new, \M, \C_\new)$ have key space $\K_\new = \K\times \K$, the same message space, and ciphertext space $\C_\new=\C\times \C$, defined as follows: $\Enc_\new((\key_1, \key_2), \msg) = (\Enc(\key_1, \key_2), \Enc(\key_2, \msg))$.
+Prove that $\Enc_\new$ has one-time secrecy. You do not need to use anything beyond in Chapter 1 of the textbook and some probability theory.
+\end{ppart}
+
+\begin{solution}
+  Hello
+\end{solution}
+
+\end{problem}
+\end{document}
