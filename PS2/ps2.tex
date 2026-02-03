@@ -27,24 +27,24 @@ A function is negligible is if goes to zero very quickly. How quickly? Faster th
 
 We will need negligible functions to formalize security (basically, we will want to make sure that the probability of adversarial success is negligible). See Chapter 2.3.1 of Boneh \& Shoup textbook. 
 
-%
-%\begin{definition}[Semantic security advantage]
-%    For a given cipher $\E= \left(E,D \right) $ defined over $\left( \K,\M\C \right) $ and for a given adversary $\Adv$, we define two experiments, Experiment 0 and Experiment 1. For $b\in \left\{0,1 \right\}$, we define Experiment $b$ as follows:
-%    \begin{itemize}
-%        \item The adversary computes $m_0, m_1 \in \M$, of the same length, and sends them to the challenger.
-%        \item The challenger computs $k \rfrom \K, c \rfrom E(k, m_b)$, and sends $c$ to the adversary. 
-%        \item The adversary outputs a bit $\hat{b} \in \left\{ 0,1 \right\} $.
-%    \end{itemize}
-%    For $b \in \left\{0,1 \right\}$, let $W_b$ be the event that $\Adv$ outputs 1 in Experiment $b$. We define $\Adv$'s \textbf{semantic security advantage} with respect to $\E$ as \[
-%    \SSadv[\Adv, \E] := \left| \Pr[W_0]- \Pr[W_1] \right| 
-%.\]
-%\end{definition}
-%
-%\begin{definition}[Semantic security]
-%    A cipher $\E$ is \textbf{semantically secure} if for all efficient adversaries $\Adv$, the value $\SSadv[\A, \E]$ is negligible.
-%    
-%\end{definition}
-%
+
+\begin{definition}[Semantic security advantage]
+   For a given cipher $\E= \left(E,D \right) $ defined over $\left( \K,\M\C \right) $ and for a given adversary $\Adv$, we define two experiments, Experiment 0 and Experiment 1. For $b\in \left\{0,1 \right\}$, we define Experiment $b$ as follows:
+   \begin{itemize}
+       \item The adversary computes $m_0, m_1 \in \M$, of the same length, and sends them to the challenger.
+       \item The challenger computs $k \rfrom \K, c \rfrom E(k, m_b)$, and sends $c$ to the adversary. 
+       \item The adversary outputs a bit $\hat{b} \in \left\{ 0,1 \right\} $.
+   \end{itemize}
+   For $b \in \left\{0,1 \right\}$, let $W_b$ be the event that $\Adv$ outputs 1 in Experiment $b$. We define $\Adv$'s \textbf{semantic security advantage} with respect to $\E$ as \[
+   \SSadv[\Adv, \E] := \left| \Pr[W_0]- \Pr[W_1] \right| 
+.\]
+\end{definition}
+
+\begin{definition}[Semantic security]
+   A cipher $\E$ is \textbf{semantically secure} if for all efficient adversaries $\Adv$, the value $\SSadv[\A, \E]$ is negligible.
+   
+\end{definition}
+
 \subsection*{Problems}
 
 \begin{problem} (15 points)
@@ -59,7 +59,87 @@ Show that each of the following functions are negligible:
 \end{problem}
 
 \begin{solution}
-Your solution goes here
+For \textbf{a}, let $c > 0$ be any positive int. Since $f(n)$ is negligible, by its definition we have:
+
+\begin{equation*}
+    \lim_{n \rightarrow \inf} f(n) \cdot n^c = 0
+\end{equation*}
+
+The same can be said for $g(n)$ too: 
+
+\begin{equation*}
+    \lim_{n \rightarrow \inf} g(n) \cdot n^c = 0
+\end{equation*}
+
+Using limit properties (property of sums), we can then get:
+
+\begin{equation*}
+    \begin{aligned}
+        \lim_{n \rightarrow \infty}[f(n) + g(n)] \cdot n^c &= \lim_{n \rightarrow \infty}[f(n) \cdot n^c + g(n) \cdot n^c] \\
+        &= \lim_{n \rightarrow \infty} f(n) \cdot n^c + \lim_{n \rightarrow \infty} g(n) \cdot n^c \\
+        &= 0 + 0 = 0
+    \end{aligned}
+\end{equation*}
+
+Since this holds for any int $c > 0$, this proves that \textbf{a} is negligible. \\ \\
+
+
+For \textbf{b}, let $c > 0$ be any positive int. Like before, $f(n)$ is negligible, so:
+
+\begin{equation*}
+    \lim_{n \rightarrow \inf} f(n) \cdot n^c = 0
+\end{equation*}
+
+Using limit properties (that of multiples), we then get: 
+
+\begin{equation*}
+    \begin{aligned}
+        \lim_{n \rightarrow \infty}[1000 \cdot f(n)] \cdot n^c = \lim_{n \rightarrow \infty} 1000 \cdot [f(n) \cdot n^c] \\
+        &= 1000 \cdot \lim_{n \rightarrow \infty} f(n) \cdot n^c \\
+        &= 1000 \cdot 0 = 0
+    \end{aligned}
+\end{equation*}
+
+As it holds for all $c > 0$, this proves \textbf{b} is negligible. \\ \\
+
+For \textbf{c}, let $c > 0$ be any positive int. We now need to show that, as $n$ grows, $\frac{1}{2^{\sqrt{n}}}$ will decay into something negligible (so to 0 essentially). Firstly, consider the expression:
+
+\begin{equation*}
+    \frac{1}{2^{\sqrt{n}}} \cdot n^c = \frac{n^c}{2^{\sqrt{n}}}
+\end{equation*}
+
+I'll show now how $\lim_{n \to \infty} \frac{n^c}{2^{\sqrt{n}}} = 0$ using limit properties.
+
+Firstly, take the natural log:
+
+\begin{equation*}
+    \ln(\frac{n^c}{2^{\sqrt{n}}}) = \ln(n^c) - \ln(2^{\sqrt{n}}) = c \ln n - \sqrt{n} \ln 2
+\end{equation*}
+
+Taking this equation, we can now consider it as a limit as $n \to \infty$:
+
+\begin{equation*}
+    \lim_{n \to \infty}[c \ln n - \sqrt{n} \ln 2] = ???
+\end{equation*}
+
+Now looking at this expression, consider \textit{which} term would grow faster consider the circumstances. $c \ln n$, or $\sqrt{n} \ln 2$? Well, the first term is essentially being multipled by a constant, $c$. The latter term, however, \textbf{is the multiple}. Therefore we can assume that the 2nd term will dominate this growth.
+
+\begin{equation*}
+    \lim_{n \to \infty}[c \ln n - \sqrt{n} \ln 2] = -\infty
+\end{equation*}
+
+Now we can take this result and plug it back into our original negligible function that we're considering:
+
+\begin{equation*}
+    \begin{aligned}
+        \lim_{n \to \infty}\frac{n^c}{2^{\sqrt{n}}} = \lim_{n \to \infty}e^{\ln(\frac{n^c}{2^{\sqrt{n}}})} \\
+        &= e^{-\infty} \\
+        &= 0
+    \end{aligned}
+\end{equation*}
+
+And since this applies for all $c > 0$, this proves \textbf{c}.
+
 \end{solution}
 
 \begin{problem} (30 points)
@@ -92,8 +172,77 @@ Prove that if $\Scheme$ is a semantically secure cipher (per Section 2.2.2 of th
 
 \end{problem}
 
+\pagebreak
+
 \begin{solution}
-Your solution goes here
+I'll prove the \textbf{contrapositive} here, so: If there exists some efficent adversary $\A$ with a non-negligible advantage, then we can make an efficent adversary $\B$ also with a non-negligible advantage in the semantic security game, contradiction that $\Scheme$ is secure.\\
+
+Given $\A$ for the country-guessing game with $\countryguessadv[\A,\Scheme] = \epsilon$, we can make $\B$ for the semantic security game as follows:
+
+\begin{itemize}
+    \item $\B$ will choose 2 distinct countries $C_0$, $C_1$ from ${\text{USA, Germany, China, Brazil, India}}$.
+    \item For each country $C_i$, $\B$ choose some arbitary airport code $m_i$ from that country.
+    \item $\B$ will then submit $m_0$, $m_1$ to the semantic security challenger (\textit{important to note how these codes will have the same length, all codes are 3-characters long.})
+    \item The challenger chooses $b \gets {0,1}$, $k \gets \K$, computs $c \gets \Enc(k, m_b)$, and then sends $c$ to $\B$.
+    \item $\B$ then sends result $c$ to $\A$ and recieves $\A$'s output  \\
+    $s \in {\text{"USA"}, \text{"Germany"}, \text{"China"}, \text{"Brazil"}, \text{"India"}}$.
+    \item $\B$ outputs $\hat{b}$ in accordance to the following rule:
+    \begin{itemize}
+        \item If $s = \country(m_0)$, output $\hat{b} = 0$.
+        \item If $s = \country(m_1)$, output $\hat{b} = 1$
+        \item Elser, output rnd $\hat{b} \gets {0,1}$
+    \end{itemize}
+\end{itemize}
+
+Let $W_b$ be the occurance that $\B$ outputs 1 in Experiement $b$ of the semantic security game. \\
+
+\textbf{Case 1: $b = 0$} (challenger encrypts $m_0$)
+\begin{itemize}
+    \item This case basically says that $\A$ recieves $m_0$ as encryption.
+    \item Let $p_0 = \Pr[\A \text{ outputs } \country(m_0) \mid \text{encryption of } m_0]$.
+    \item Let $p_1 = \Pr[\A \text{ outputs } \country(m_1) \mid \text{encryption of } m_0]$.
+    \item Then, $\Pr[W_0] = \Pr[\B \text{ outputs } 1 \mid b=0] = p_1 + \frac{1}{2}(1 - p_0 - p_1)$
+\end{itemize}
+
+\textbf{Case 2: $b = 1$} (challenger encrpyts $m_1$)
+\begin{itemize}
+    \item In this case, $\A$ insteads gets $m_1$.
+    \item Let $q_0 = \Pr[\A \text{ outputs } \country(m_0) \mid \text{encryption of } m_1]$.
+    \item Let $q_1 = \Pr[\A \text{ outputs } \country(m_1) \mid \text{encryption of } m_1]$.
+    \item Then, $\Pr[W_1] = \Pr[\B \text{ outputs } 1 \mid b=1] = q_1 + \frac{1}{2}(1 - q_0 - q_1)$.
+\end{itemize}
+
+By the definition of $\countryguessadv$, we know that, overall, $\A$ will guess the correct country with a probability of $\frac{1}{5} + \delta$ for some $\delta$ (where $|\delta| = \epsilon$, and we can then also assume that \textit{,in general}, that $\delta > 0$ because otherwise we could just flip $\A$'s output). \\
+
+When looking at the specific countries $C_0$, $C_1$, $\A$ NEEDS to have AT LEAST the avg. adv. Then \textit{in general}, we then assume that $\A$ is AT LEAST as good at distinguishing between $C_0, C_1$ as between any other pair of countries. We then get:     
+
+\begin{equation*}
+    \frac{p_0 + q_1}{2} \geq \frac{1}{5} + \frac{\epsilon}{2}
+\end{equation*}
+
+This is because, when encryption $m_0$, $\A$ should output $\country(m_0)$, with a probability of AT LEAST $\frac{1}{5} + \frac{\epsilon}{2}$, and similarily of that for $m_1$.\\
+
+Then, the semantic security advantage for $\B$ becomes:
+
+\begin{equation*}
+    \begin{aligned}
+        \SSadv[\B,\Scheme] &= |\Pr[W_0] - \Pr[W_1]| \\
+        &= \left| \left(p_1 + \frac{1}{2}(1 - p_0 - p_1)\right) - \left(q_1 + \frac{1}{2}(1 - q_0 - q_1)\right) \right| \\
+        &= \left| \frac{1}{2}(p_1 - p_0 - p_1 + q_0 + q_1 - q_1) \right| \\
+        &= \frac{1}{2}|q_0 - p_0|
+    \end{aligned}
+\end{equation*}
+
+Now, since $\A$ has that advantage $\epsilon$ overall, and we've chosen the counties where $\A$ performs best, we now have $|q_0 - p_0| \geq \frac{\epsilon}{5}$. \textit{Note that the factor comes from the num. of possible counties. This means, worst case, $\A$'s adv. is spread evenly across all country pairs.}\\  
+
+Therefore:
+\begin{equation*}
+    \SSadv[\B, \Scheme] \geq \frac{\epsilon}{10}
+\end{equation*}
+
+Since $\epsilon$ is non-negligible by our assumption, $\frac{\epsilon}{10}$ will then also be non-negligible (this is proven from our answer from \textbf{1} as well, we can apply limit properties to preserve non-negligibility). \\
+
+By proving this, we ultimately prove that $\B$ is an efficent adversary.
 \end{solution}
  
 \begin{problem} (30 points)
@@ -107,6 +256,7 @@ The adversary should \textbf{not} depend on any knowledge about $\Scheme$ that c
 
 This problem justifies why any reasonable definition of semantic security must allow for at least a negligible advantage for $\Adv$ even when the running time of $\Adv$ is limited.
 \end{problem}
+
 \begin{solution}
 Your solution goes here
 \end{solution}
@@ -146,8 +296,8 @@ Your solution goes here
 % \end{problem}
 
 % \begin{solution}
-Your solution goes here
-\end{solution}
+% Your solution goes here
+% \end{solution}
 
 \begin{problem}(25 points)[Boneh-Shoup Exercise 2.10 from Section 2.6]
 Let $\Scheme = (\Enc, \Dec)$ be a semantically
