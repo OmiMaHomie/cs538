@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1770128907.87887 "/home/omimahomie/cs538/PS2/ps2.tex" "ps2.pdf" "ps2" 1770128908.93021 0
+["pdflatex"] 1770159059.99639 "/home/omimahomie/cs538/PS2/ps2.tex" "ps2.pdf" "ps2" 1770159060.91625 0
   "/etc/texmf/web2c/texmf.cnf" 1757970215.13359 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/omimahomie/cs538/PS2/ps2.tex" 1770128907.58752 15681 7ba7659ad07393e8266e63cd27e72db6 ""
+  "/home/omimahomie/cs538/PS2/ps2.tex" 1770159059.76877 19604 715144f7212f7fd04ebaeccdc3df0d85 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc" 1490131464 2921 8ca0eb0831f9bc5da080d3697cfe67bf ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc" 1490131464 2933 9ad527ce78d7c5fa0a642dead095f172 ""
@@ -264,9 +264,9 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1758299484 6800788 4be6de6288c377fb30682838bc8197af ""
   "macros.tex" 1769523225 8840 d18a955f406e522bf66c3915c8636cb0 ""
   "pipetex.sty" 1768594788 4462 d9bbd963d0b8d71753442fb3fb8dc06b ""
-  "ps2.aux" 1770128908.79399 162 f042405b684a8c860cba07045d113040 "pdflatex"
-  "ps2.out" 1770128908.56133 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "ps2.tex" 1770128907.58752 15681 7ba7659ad07393e8266e63cd27e72db6 ""
+  "ps2.aux" 1770159060.80095 162 8041607b76d73e3dcbdb7e912bad98fd "pdflatex"
+  "ps2.out" 1770159060.57802 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "ps2.tex" 1770159059.76877 19604 715144f7212f7fd04ebaeccdc3df0d85 ""
   (generated)
   "ps2.aux"
   "ps2.log"

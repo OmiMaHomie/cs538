@@ -175,7 +175,7 @@ Prove that if $\Scheme$ is a semantically secure cipher (per Section 2.2.2 of th
 \pagebreak
 
 \begin{solution}
-I'll prove the \textbf{contrapositive} here, so: If there exists some efficent adversary $\A$ with a non-negligible advantage, then we can make an efficent adversary $\B$ also with a non-negligible advantage in the semantic security game, contradiction that $\Scheme$ is secure.\\
+I'll prove the \textbf{contrapositive} here, so: If there exists some efficent adversary $\A$ with a non-negligible advantage, then we can make an efficent adversary $\B$ also with a non-negligible advantage in the semantic security game, meaning that $\Scheme$ isn't secure.\\
 
 Given $\A$ for the country-guessing game with $\countryguessadv[\A,\Scheme] = \epsilon$, we can make $\B$ for the semantic security game as follows:
 
@@ -242,7 +242,7 @@ Therefore:
 
 Since $\epsilon$ is non-negligible by our assumption, $\frac{\epsilon}{10}$ will then also be non-negligible (this is proven from our answer from \textbf{1} as well, we can apply limit properties to preserve non-negligibility). \\
 
-By proving this, we ultimately prove that $\B$ is an efficent adversary.
+By proving this, we ultimately show that $\B$ is an efficent adversary. This proves the contrapositive of the OG statements, therefore proving the original statement.
 \end{solution}
  
 \begin{problem} (30 points)
@@ -258,7 +258,84 @@ This problem justifies why any reasonable definition of semantic security must a
 \end{problem}
 
 \begin{solution}
-Your solution goes here
+Back in last week's discussion, the solution to the referred question involved us essentially doing this exhaustive key search, eventually getting us that $\SSadv$, but being really inefficent. This attack however, could just be accomplished by basically \textit{randomly choosing msgs and keys and interpreting their ciphertexts and outputs.}\\
+
+Given the cipher with the above properties, we can make an adversary $\Adv$ as follow:
+
+\begin{itemize}
+    \item $\Adv$ chooses 2 distinct msgs $m_0, m_1 \gets \mathcal{M}$ uniformly at rnd (making sure $m_0 \neq m_1$).
+    \item $\Adv$ sends $m_0, m_1$ to the challenger.
+    \item The challenger outputs ciphertext $c \gets \Enc(k, m_b)$ for $b \gets {0,1}$.
+    \item $\Adv$ chooses a rnd key $k' \gets \mathcal{K}$ uniformly.
+    \item $\Adv$ computes $m' \gets \Dec(k', c)$.
+    \item $\Adv$ outputs 1 if $m' = m_0$, and 0 otherwise.
+\end{itemize}
+
+The running time of this adversary is dominated by the one $\Dec$ operation, and is therefore comparable to the running time of $\Enc$ and $\Dec$. This satisfies the time constraint for this problem.\\
+
+Now, let $W_b$ be the occurance that $\Adv$ outputs 1 in Experiment $b$. I can now analyze $\Pr[W_0]$ and $\Pr[W_1]$.
+
+\textbf{Experiment 1: $b = 0$ ($c$ is an encryption of $m_0$ with some key $k^*$)}
+
+    \begin{itemize}
+        \item The real key $k^*$ satisfies $\Dec(k^*, c) = m_0$
+        \item When $\Adv$ picks $k' = k^*$ (which happens with a chance of $1/|\mathcal{K}|$), $\Dec(k', c) = m_0$
+        \item When $\Adv$ picks $k' \neq k^*$, $\Dec(k', c)$ could be $m_0$ or something else
+        \item Let $p = \Pr[\Dec(k', c) = m_0 \mid k' \neq k^*]$
+        \item Then, \\
+        \begin{equation*}
+            \Pr [W_0] = \frac{1}{|\K|} + (1 - \frac{1}{|\K|})p
+        \end{equation*}
+    \end{itemize}
+
+\textbf{Experiment 2: $b = 1$ ($c$ is an encryption of $m_1$ with some key $k^*$.)}
+
+    \begin{itemize}
+        \item Now, the real key $k^*$ satisfies $\Dec(k^*, c) = m_1 \neq m_0$
+        \item When $\Adv$ picks $k' = k^*$ (the probability is $1/|\mathcal{K}|$), $\Dec(k', c) = m_1 \neq m_0$
+        \item When $\Adv$ picks $k' \neq k^*$, $\Dec(k', c)$ can by any other wrong answer.
+        \item Let $q = \Pr[\Dec(k', c) = m_0 \mid k' \neq k^*]$
+        \item Therefore, \\
+        \begin{equation*}
+            \Pr [W_1] = 0 \cdot \frac{1}{|\K|} + (1 - \frac{1}{|\K|}) q = (1 - \frac{1}{|\K|}) q
+        \end{equation*}
+    \end{itemize}
+
+Now, since $|\mathcal{K}| < |\mathcal{M}|$, each ciphertext $c$ can be decrypted to AT MOST $|\mathcal{K}|$ different messages (one / key). Over all possible $k' \in \mathcal{K}$, the values $\Dec(k', c)$ take AT MOST $|\mathcal{K}|$ distinct values. Since $m_0$ was chosen uniformly from $\mathcal{M}$ and $|\mathcal{K}| < |\mathcal{M}|$:
+
+\begin{equation*}
+    q \leq \frac{|\K|}{|\M|} < 1
+\end{equation*}
+
+Moreover, experiment 0 shows show that we know AT LEAST 1 key ($k^*$) that does decrypt to $m_0$, so:
+
+\begin{equation*}
+    p \geq \frac{1}{|\K|} \text{(or, the fraction of keys that decrypt } c \text{ to } m_0 \text{)}
+\end{equation*}
+
+This can also be thought of as:
+
+\begin{equation*}
+    p = \frac{\text{number of keys } k' \text{ with } \Dec(k', c) = m_0}{|\mathcal{K}|} \geq \frac{1}{|\mathcal{K}|}
+\end{equation*}
+
+And therefore: 
+
+\begin{equation*}
+    \begin{aligned}
+        \Pr [W_0] - \Pr [W_1] \\
+        &= [ \frac{1}{|\K|} + (1 - \frac{1}{|\K|}) p] - (1 - \frac{1}{|\K|}) q \\
+        &= \frac{1}{|\K|} + (1 - \frac{1}{|\K|})(p-q)
+    \end{aligned}
+\end{equation*}
+
+Since $p \geq 1/|\mathcal{K}|$ and $q \leq |\mathcal{K}|/|\mathcal{M}| < 1$, and $1/|\mathcal{K}| > 0$, we have:
+
+\begin{equation*}
+    \Pr [W_0] - \Pr [W_1] > 0
+\end{equation*}
+
+Thusly, $\SSadv[\Adv, \Scheme] = |\Pr[W_0] - \Pr[W_1]| > 0$, giving us an efficent attack that breaks the original cipher algorithm.
 \end{solution}
 
 % \begin{problem} (25 points)
@@ -308,7 +385,7 @@ Either give an attack or provide a security proof via an explicit reduction.
 \begin{ppart}
     Let $\Scheme_{1}$ be a scheme s.t. $\Enc_1(k,m) := 0 || \Enc(k,m)$
 
-    \begin{solution}
+\begin{solution}
 Your solution goes here
 \end{solution}
 \end{ppart}
@@ -316,14 +393,10 @@ Your solution goes here
 \begin{ppart}
     Let $\Scheme_2$ be a scheme s.t. $\Enc_2(k,m) := \Enc(k,m) || \parity(m)$, where $\parity$ of a binary string refers to the number of 1 bits (equivalently, the exclusive-or of all the bits) in the string.
 
-    \begin{solution}
+\begin{solution}
 Your solution goes here
 \end{solution}
 \end{ppart}
-
-
 \end{problem}
-
-
 \end{document}
  
