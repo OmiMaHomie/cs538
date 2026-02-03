@@ -1,0 +1,179 @@
+\documentclass[12pt]{article}
+
+\newif\ifsol
+\soltrue
+
+\include{macros}
+
+\begin{document}
+\begin{center}
+\Large{\textbf{CAS CS 538.  \ifsol Solutions to \fi Problem Set 2}}\\
+\smallskip
+\large{\textbf{Due electronically via gradescope, Monday February 2, 2026 11:59pm
+}}
+\end{center}
+
+\subsection*{Useful Definitions}
+
+A function is negligible is if goes to zero very quickly. How quickly? Faster than $1/n$, $1/n^2$, $1/n^3$, etc. Formally, we have the following definition.
+
+\begin{shaded*}
+\begin{definition}[Negligible function]
+    A function $f : \mathbb{Z}_{\ge 1} \to \mathbb{R}$ is \textbf{negligible} if for all integers $c>0$, we have \[
+        \lim_{n \to \infty} f(n) \cdot n^c  = 0
+    .\]
+\end{definition}
+\end{shaded*}
+
+We will need negligible functions to formalize security (basically, we will want to make sure that the probability of adversarial success is negligible). See Chapter 2.3.1 of Boneh \& Shoup textbook. 
+
+%
+%\begin{definition}[Semantic security advantage]
+%    For a given cipher $\E= \left(E,D \right) $ defined over $\left( \K,\M\C \right) $ and for a given adversary $\Adv$, we define two experiments, Experiment 0 and Experiment 1. For $b\in \left\{0,1 \right\}$, we define Experiment $b$ as follows:
+%    \begin{itemize}
+%        \item The adversary computes $m_0, m_1 \in \M$, of the same length, and sends them to the challenger.
+%        \item The challenger computs $k \rfrom \K, c \rfrom E(k, m_b)$, and sends $c$ to the adversary. 
+%        \item The adversary outputs a bit $\hat{b} \in \left\{ 0,1 \right\} $.
+%    \end{itemize}
+%    For $b \in \left\{0,1 \right\}$, let $W_b$ be the event that $\Adv$ outputs 1 in Experiment $b$. We define $\Adv$'s \textbf{semantic security advantage} with respect to $\E$ as \[
+%    \SSadv[\Adv, \E] := \left| \Pr[W_0]- \Pr[W_1] \right| 
+%.\]
+%\end{definition}
+%
+%\begin{definition}[Semantic security]
+%    A cipher $\E$ is \textbf{semantically secure} if for all efficient adversaries $\Adv$, the value $\SSadv[\A, \E]$ is negligible.
+%    
+%\end{definition}
+%
+\subsection*{Problems}
+
+\begin{problem} (15 points)
+
+Show that each of the following functions are negligible:
+\begin{enumerate}[label=\alph*)]
+    \item $f(n) + g(n)$, where $f(n)$ and $g(n)$ are both negligible
+    \item $1000 \cdot f(n)$, where $f(n)$ is negligible
+    \item $\frac{1}{2^{\sqrt{n}}}$ 
+\end{enumerate}
+    
+\end{problem}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+\begin{problem} (30 points)
+
+    You're a rising spy working your way up the ranks of national intelligence. One day you are sent a top-secret mission via a mysterious encrypted message. It's a single clue: a three-character airport code for one of the following airports in five possible countries:
+    \begin{center}
+    \begin{tabular}{c | c | c | c | c}
+        \textbf{USA} & \textbf{Germany} & \textbf{China} & \textbf{Brazil} & \textbf{India}\\
+        \hline
+        BOS & MUC & PEK & GIG & DEL\\
+        JFK & FRA & SZX & BSB & BOM \\
+        LAX & DUS & PVG & GRU & MAA\\
+        DCA & HAM & CAN & CGH & BLR\\
+    \end{tabular}
+    \end{center}
+
+Unbeknownst to you, a copy of the ciphertext was intercepted by a rival attempting to learn which country you are going to. 
+
+
+Consider the following security game between a challenger and an adversary. 
+Let $\Scheme=(\Enc, \Dec)$ be a computational cipher with message space $\M$ equal to the set of 20 airport codes above. 
+The challenger chooses a random plaintext $m\rfrom \M$ and key $k\rfrom \K$, computes $c\rfrom \Enc(k, m)$ and sends $c$ to the adversary. The adversary $\Adv$ outputs a string $s$ from the following set: \[
+    \left\{ \verb|"USA"|, \verb|"Germany"|, \verb|"China"|, \verb|"Brazil"|, \verb|"India"|\right\} 
+.\]
+Let $\country(m)$ be a function that outputs the country string in which a given airport code is located. Let $W$ be the event that $s = \country(m)$, let $p= \Pr[W]$, and define $\countryguessadv[\Adv, \Scheme] = |p - \frac{1}{5}|$. 
+
+Prove that if $\Scheme$ is a semantically secure cipher (per Section 2.2.2 of the textbook), then for any efficient adversary $\A$, $\countryguessadv[\A,\Scheme]$ is negligible. Notice what this implies: your rival's attempt to learn which country you're travelling to is at most negligibly better than random guessing.
+
+\textit{To prove this, use a reduction: supposing there exists an efficient adversary with non-negligible advantage in the country-guessing game, construct an efficient adversary with non-negligible advantage in the semantic security game. }
+
+\end{problem}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+ 
+\begin{problem} (30 points)
+Let $\Scheme$ be a computational cipher with $|\K| < |\M|$.
+Construct an adversary $\Adv$ against $\Scheme$ such that the running time of $\Adv$ is very reasonable (in fact, comparable to the running time of $\Enc$ and $\Dec$) and $\SSadv[\Adv, \Scheme]>0$. Note that it is okay if $\SSadv[\Adv, \Scheme]$ is very small, as long as it is positive.
+
+You must demonstrate what the adversary does and prove that its $\SSadv$ is positive.
+The adversary should \textbf{not} depend on any knowledge about $\Scheme$ that cannot be efficiently obtained (for example, the adversary doesn't know exact probabilities of different ciphertexts).
+
+\emph{Hint: For the adversary design, use the idea from Discussion 2 Problem 2. You can't perform exhaustive search, of course, because you don't have the time; make a random guess instead. Then analyze the probability of outputting 1 in each of the two experiments. This analysis will be different from the one in discussion --- go back to your first principles of probability. Conclude that it has non-zero advantage.}
+
+This problem justifies why any reasonable definition of semantic security must allow for at least a negligible advantage for $\Adv$ even when the running time of $\Adv$ is limited.
+\end{problem}
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+% \begin{problem} (25 points)
+
+% For this problem, you will prove that applying an insecure cipher on top of a secure cipher can still result in a secure cipher.
+
+% Let $(\cenc, \cdec)$ be a Caeser cipher on bytes over $\left( \K_1, \M_1, \C_1 \right) $, where $\K_1 = \left\{0,1 \right\}^8$, $\M_1 = \left\{ 0,1 \right\} ^{8L}$, and $\C_1 = \left\{0,1 \right\}^{8L}$. Concretely,  
+
+% \begin{figure}[h!]
+% \center
+% \begin{subfigure}{0.4\linewidth}
+% \titlecodebox{\cenc(k, m)}{
+%     \> for $i =0$ to $L-1$:\\
+%     \> \> $c_i := k \oplus m[8i:8(i+1)]$\\
+%     \> $c := c_0 \parallel c_1 \parallel \cdots \parallel c_{L-1}$\\
+%     \> return $c$
+% }
+% \end{subfigure}
+% \begin{subfigure}{0.4\linewidth}
+% \titlecodebox{\cdec(k, c)}{
+%     \> for $i =0$ to $L-1$:\\
+%     \> \> $m_i := k \oplus c[8i:8(i+1)]$\\
+%     \> $m := m_0 \parallel m_1 \parallel \cdots \parallel m_{L-1}$\\
+%     \> return $m$
+% }
+% \end{subfigure}
+% \end{figure}
+
+% Let $\E=(\Enc, \Dec)$ be a semantically secure cipher over $\left( \K_2,\M_2,\C_2 \right) $, where $\C_2 = \left\{0,1 \right\}^{8L}$. Define a modified encryption scheme $\E' = \left( \Enc', \Dec' \right) $ over $\left( \K_1 \times \K_2, \M_2, \C_1 \right) $, where 
+% \begin{align*}
+%     \Enc'((k_1, k_2) ,m) &= \cenc(k_1, \Enc(k_2, m))\\
+%     \Dec'((k_1,k_2), c) &= \Dec(k_2, (\cdec(k_1, c))
+% .\end{align*}
+% Prove that $\E'$ is as secure as $\E$. That is, prove that for any adversary $\Adv$, there is an adversary $\B$ of similar running time such that $\SSadv[\B, \E] = \SSadv[\Adv, \E']$.
+% \end{problem}
+
+% \begin{solution}
+Your solution goes here
+\end{solution}
+
+\begin{problem}(25 points)[Boneh-Shoup Exercise 2.10 from Section 2.6]
+Let $\Scheme = (\Enc, \Dec)$ be a semantically
+secure cipher defined over $(\K,\M, \C)$, where $\M = \C = \{0, 1\}^L$. 
+Which of the following encryption algorithms yields a semantically secure scheme? 
+Either give an attack or provide a security proof via an explicit reduction.
+
+\begin{ppart}
+    Let $\Scheme_{1}$ be a scheme s.t. $\Enc_1(k,m) := 0 || \Enc(k,m)$
+
+    \begin{solution}
+Your solution goes here
+\end{solution}
+\end{ppart}
+
+\begin{ppart}
+    Let $\Scheme_2$ be a scheme s.t. $\Enc_2(k,m) := \Enc(k,m) || \parity(m)$, where $\parity$ of a binary string refers to the number of 1 bits (equivalently, the exclusive-or of all the bits) in the string.
+
+    \begin{solution}
+Your solution goes here
+\end{solution}
+\end{ppart}
+
+
+\end{problem}
+
+
+\end{document}
+ 
