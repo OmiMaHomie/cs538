@@ -134,13 +134,76 @@ Suppose $\Adv$ in Attack Game 3.1 uses the following strategy. Choose a random $
   Consider PRG $G_a: \{0, 1\}^{n + 1} \to \R \times \{0, 1\}$ defined as $G_a(s) = G(s_1s_2 \ldots s_{n}) \parallel s_{n+1}$, where $s_1s_2\ldots s_{n+1}$ is the bit decomposition of $s$. Show that $G_a$ is a secure PRG assuming $G$ is secure.
 \end{ppart}
 \begin{solution}
-Your solution goes here
+  Assuming that $G$ is a secure PRG, I'll prove how $G_a$ is also secure via reduction.\\
+
+  Let me define the following:
+  \begin{itemize}
+    \item $\A = $ efficent adversary against $G_a$
+    \item $\PRGadv[\A, G_a] = |\Pr_{s \leftarrow \{0, 1\}^{n+1}}[\A(G_a(s)) = 1] - \Pr_{(r,b) \leftarrow \R \times \{0, 1\}}[\A(r, b) = 1]|.$
+    \item $\B = $ a new adversary against $G$ with the following logic:
+    \begin{itemize}
+      \item $\B$ gets $z \in \R$ from the challenger, where $z = G(x)$ for uniform $x \in \{0, 1\}^n$ from $\exp 0$, or just uniform $z \in \R$ from $\exp 1$
+      \item $\B$ picks a uniform bit $b \leftarrow \{0, 1\}.$
+      \item $\B$ outputs $(z, b)$ to $\A$, an then outputs whatever $\A$ gives.
+    \end{itemize}
+  \end{itemize}
+
+  \textbf{Exp 0:}\\
+  In this case, $z = G(x)$ for uniform $x \in \{0, 1\}^n$. The pair $(z, b) = (G(x), b)$ is distribute exactly as $G_a(s)$ for $s = (x, b)$, since $x, b$ are both independent and random. Therefore,
+  \begin{equation*}
+    \Pr[\B \text{ outputs } 1 | \exp 0 \text{for } G] = \Pr_{s \leftarrow \{0, 1\}^{n+1}}[\A(G_a(s)) = 1].
+  \end{equation*}
+
+  \textbf{Exp 1:}\\
+  In this case now, $z$ is just chosen uniformly from $\R$. Since $b$ is also uniform and independent from $z$, the pair $(z, b)$ will then also be uniform over $\R \times \{0, 1\}$. Therefore,
+  \begin{equation*}
+    \Pr[\B \text{ outputs } 1 | \exp 1 \text{for } G] = \Pr_{(r, b) \leftarrow \R \times \{0, 1\}}[\A(r, b) = 1].
+  \end{equation*}
+
+  Therefore the PRG advantage is:
+  \begin{equation*}
+    \PRGadv[\B, G] = |\Pr[\B \text{ outputs} 1 | \exp 0 \text{for } G] - \Pr[\B \text{ outputs } 1 | \exp 1 \text{for } G]| = \PRGadv[\A, G_a].
+  \end{equation*}
+
+  Since $G$ is secure, $\PRGadv[\B, G]$ will be negligible for any efficent $\B$. And since $\B$ is efficent (it esseentiall is only "flipping" a coin and then runs $\A$), $\PRGadv[\A, G_a]$ will also be negligible. Therefore, no efficent adversary will be able to distinguish $G_a$ from some random output, so $\therefore G_a$ is a secure PRG.
 \end{solution}
 \begin{ppart} (15 points)
   Show that $G_a$ is insecure if its random seed is chosen so that its last bit is always 0. Demonstrate an adversary and compute its advantage.
 \end{ppart}
 \begin{solution}
-Your solution goes here
+  In this part now, effectively what has changes is the seed value, $s$ from $G_a$, as when it's chosen, a 0 is appended to the end, effectively reucing the seed space to $\{0, 1\}^n \times \{0\}.$. For a seed $s = (x, 0)$, where $x \leftarrow \{0, 1\}^n$ is uniform, then the output should be
+  \begin{equation*}
+    G_a(x, 0) = G(x) || 0
+  \end{equation*}
+  Basically just restating that the last bit of the output will always be 0.\\
+
+  For the contruction of $\A$, I will form the following:
+  \begin{itemize}
+    \item $\A$ gets a pair $(z, c) \in \R \times \{0, 1\}.$
+    \begin{itemize}
+      \item If $c = 0, \A$ returns 1 (or `real')
+      \item Else, returns 0 (or just `random')
+    \end{itemize}
+  \end{itemize}
+
+  \textbf{Exp 0 (Real) Analysis}\\
+  The challenger will pick $x \leftarrow \{0, 1\}^n$, an then returns $(G(x), 0)$. The last bit $c$ will then always be 0, so Therefore
+  \begin{equation*}
+    \Pr[\A \text{ outputs } 1 | \exp 0] = 1.
+  \end{equation*}
+
+  \textbf{Exp 1 (Random) Analysis}\\
+  The challenger now will pick $(r, b) \leftarrow \R \times \{0, 1\}$ uniformly. The last bit $b$ is uniform from $\{0, 1\}$, so therefore
+  \begin{equation*}
+    \Pr[\A \outputs 1 | \exp 1] = \Pr[b = 0] = 1/2.
+  \end{equation*}
+
+  So therefore, the advantage of $\A$ will be
+  \begin{equation*}
+    \PRGadv[\A, G_a] = |1 - \frac{1}{2}| = \frac{1}{2}.
+  \end{equation*}
+
+  This is a constant value (and a big one too), so the advantage is certainly non-negligible, making $G_a$ insecure.
 \end{solution}
 \begin{ppart} (15 points)
   Construct a secure PRG $G_c: \{0, 1\}^{n + 1} \to \R \times \{0, 1\}$ that becomes insecure if its seed $s$ is chosen so that the \emph{parity} of the bits in $s$ is always $0$ (where parity is defined as the XOR of all the bits). Hint: a small change to $G_a$ is all you need here. Note that you will need to prove two separate facts: that $G_c$ is secure when its seed is uniform, and that $G_c$ is insecure when when the parity of the bits of $s$ is 0. Both of these proofs can use the previous parts, even if you have not solved them.

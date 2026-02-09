@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1770613422.20532 "/home/omimahomie/cs538/PS3/ps3.tex" "ps3.pdf" "ps3" 1770613423.18779 0
+["pdflatex"] 1770663532.80006 "/home/omimahomie/cs538/PS3/ps3.tex" "ps3.pdf" "ps3" 1770663533.75901 0
   "/etc/texmf/web2c/texmf.cnf" 1757970215.13359 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/omimahomie/cs538/PS3/ps3.tex" 1770613421.87447 7964 0526455533bb7d60c2d841c5b3c87860 ""
+  "/home/omimahomie/cs538/PS3/ps3.tex" 1770663532.54846 11474 e302e597cfc67547f06bbb90f84fde88 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc" 1490131464 2921 8ca0eb0831f9bc5da080d3697cfe67bf ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc" 1490131464 2933 9ad527ce78d7c5fa0a642dead095f172 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc" 1490131464 2934 a4a9158faed2e9e89c771b4e3b7fc12f ""
@@ -39,9 +39,11 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1248133631 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1248133631 32722 d7379af29a190c3f453aba36302ff5a9 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1248133631 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb" 1354061736 548786 1e51d517556d29f2841d57da58668a69 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb" 1354061736 614791 ea39341e4db76f25cb20c361802d3cd5 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb" 1354061736 538965 19c5c8b7f952ac97afb8565e9c21a82d ""
@@ -249,9 +251,9 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1758299484 6800788 4be6de6288c377fb30682838bc8197af ""
   "macros.tex" 1770126996 9051 740d9996f1a3a4523397d475fe0f9a5d ""
   "pipetex.sty" 1768594788 4462 d9bbd963d0b8d71753442fb3fb8dc06b ""
-  "ps3.aux" 1770613423.05484 162 59504cb8f8bee0a3f0488d753cb23a1e "pdflatex"
-  "ps3.out" 1770613422.85324 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "ps3.tex" 1770613421.87447 7964 0526455533bb7d60c2d841c5b3c87860 ""
+  "ps3.aux" 1770663533.64797 162 f0fda7573680236e99560fa2ea99f7ba "pdflatex"
+  "ps3.out" 1770663533.42574 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "ps3.tex" 1770663532.54846 11474 e302e597cfc67547f06bbb90f84fde88 ""
   (generated)
   "ps3.aux"
   "ps3.log"
