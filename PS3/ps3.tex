@@ -1,0 +1,165 @@
+\documentclass[12pt]{article}
+
+\newif\ifsol
+\soltrue
+
+\include{macros}
+
+\begin{document}
+\begin{center}
+\Large{\textbf{CAS CS 538.  \ifsol Solutions to \fi Problem Set 3}}\\
+\smallskip
+\large{\textbf{Due electronically via gradescope, Monday February 9, 2026 11:59pm
+}}\\
+\large{\textbf{Om Khadka, U51801771}}
+\end{center}
+
+\noindent
+
+\subsection*{Problems}
+
+\begin{problem} (10 points)
+Suppose $\Adv$ in Attack Game 3.1 uses the following strategy. Choose a random $t\in \mathcal{S}$ and output $1$ if and only if $G(t)=r$. Suppose $G$ is injective. Compute $\PRGadv[\Adv, G]$.
+\end{problem}
+\begin{solution}
+  The definition of the game is just gonna be the game 3.1 layout from the book (Graduate Course in Applied Cryptography). From the given attack methodology, we're essentially computing for
+  \begin{equation*}
+    \PRGadv[\A, G] = |\Pr[W_0] - \Pr[W_1]|
+  \end{equation*}
+  Where $W_b$ is just the chance that $\A$ returns 1 from any particular game.\\
+
+  \textbf{$\exp 0$ (Using $G$)}\\
+  In $\exp 0$, the following happens:
+  \begin{itemize}
+    \item Challenger picks $s \in^{R} \S$. Then, check if $r = G(s)$.
+    \item Adversary $\A$ now gets $r$, chooses $t \in^{R} \S$, and outputs
+    \begin{itemize}
+      \item 1 IFF $G(t) = r$
+      \item 0 otherwise
+    \end{itemize}
+  \end{itemize}
+  Firstly, note that $G(t) = r$ can also be thought of as $G(t) = G(s)$. And since $G$ is one-to-one, $G(t)$ mapping out to $G(s)$ implies that $t = s$. Moreover, since $s, t$ are determined independently and randomly from $\S$, we're essentially just checking if, upon randomly selecting 2 values from $\S$, that those 2 values end up being the same from $\S$, which equates to
+  \begin{equation*}
+    \Pr[W_0] = \Pr[t = s] = \frac{1}{|\S|}
+  \end{equation*}
+
+  \textbf{$\exp 1$ (Using a rnd value)}\\
+  In $\exp 1$, the following happens:
+  \begin{itemize}
+    \item Challenger picks $r \in^{R} \R$.
+    \item Adversary then gets $r$, chooses $t \in^{R} \S$, and then outputs
+    \begin{itemize}
+      \item 1 IFF $G(t) = r$
+      \item 0 else
+    \end{itemize}
+  \end{itemize}
+  Now here, firstly note how $r$ is independent from $t, \S$, and random from $\R$. Also since $G$ is injective, this then means that this comparison is now just checking if some ranomly chosen seed, $G(t)$ happens to also be the same value as some truly random number, $r$. This equates to
+  \begin{equation*}
+    \Pr[W_1] = \Pr[t = r] = \frac{1}{|\R|}
+  \end{equation*}
+
+  So plugging these values back into our OG equation:
+  \begin{equation*}
+    \begin{aligned}
+      \PRGadv[\A, G] &= |\Pr[W_0] - \Pr[W_1]|\\
+      &= |\frac{1}{|\S|} - \frac{1}{|\R|}|\\
+      &= \frac{1}{|\S|} - \frac{1}{|\R|}
+    \end{aligned}
+  \end{equation*}
+
+  \textit{Note: Since $G$ is injective, there's no way that $S$ can map out to more values than in $\R$. That's why I omitted those $||$'s}
+
+\end{solution}
+
+\begin{problem} (20 points) Let $G : \left\{0,1 \right\}^n \to \left\{0,1 \right\}^{2n}$ be a secure PRG. Let $G'$ be a function where $G'(s)$ computes $G(s)$, deletes every third bit, and returns the result. Prove $G'$ is a secure PRG.
+\end{problem}
+ 
+\begin{solution}
+  Before solving this, I'll just say that, intuitively, the reason why $G'$ is secure is because applying some random mathematical operation to an output won't meaningfuly change the message in such a way as to be recognizable (\textit{Like adding $1$ to all msgs $x$ doesn't reveal anything meaningful}.)\\
+
+  I'll define the following:
+  \begin{itemize}
+    \item $G'(s) = $ the result of computing $y = G(s)$, and then removing every third bit in $y$.
+    \item $L = 2n - [2n / 3] = $ the length of output $G'(s)$.
+    \item $G' : \{0,1\}^n \to \{0, 1\}^L$.
+  \end{itemize}
+
+  Suppose, for the sake of contradiction, that $G'$ isn't secure. I'll make a new adversary, $\A'$, that'll then use $G'(s)$ to distinguish games using random inputs from games using the problem's defined input. That is,
+  \begin{equation*}
+    \PRGadv[\A', G'] = | \Pr_{s \leftarrow \{0, 1\}^n}[\A'(G'(s)) = 1] - \Pr_{r \leftarrow \{0, 1\}^L}[\A'(r) = 1]|
+  \end{equation*}
+  is non-negligible.\\
+
+  The adversary, $\A$, will use $\A'$ to break $G$. $G$ will just be the attack methodology from Game 3.1 from the book from before. That is,
+  \begin{itemize}
+    \item $\exp 0$ will guess from a pseudo-rnd seed $s$
+    \item $\exp 1$ will guess from a truly random value $y$.
+  \end{itemize}
+
+  \textbf{$\A$ construction:}
+  \begin{itemize}
+    \item Get $y = \{0, 1\}^{2n}$ from challenger.
+    \item Compute $y' = y$ but with every third bit removed $(3, 6, ...)$.
+    \item Run $\A'$ with $y'$ to get $b$.
+    \item Return $b$.
+  \end{itemize}
+
+  \textbf{$\exp 0$:}\\
+  Challenger will pick $s \leftarrow \{0, 1\}^n$, and then sends $y = G(s)$. $y'$ will then be $G'(s)$ by our defintion, otherwise meaning that:
+  \begin{equation*}
+    \Pr[\A \text{outputs } 1 | \exp 0] = \Pr_{s \leftarrow \{0, 1\}^n}[\A'(G'(s)) = 1]
+  \end{equation*}
+
+  \textbf{$\exp 1$:}\\
+  The challenger will pick $y \leftarrow \{0, 1\}^{2n}$ at random. I claim that $y'$ is uniformly distributed over $\{0, 1\}^L$. This holds since each bit of $y$ is independent and random, and deleted fixed positions from these bits will still make it independent and random. In other words, I could say that the mapping of $f : \{0, 1\}^{2n} \to \{0, 1\} ^L$ is surjective (onto), and that each $z \in \{0, 1\}^L$ will have exxactly $2^{2n / 3}$ elements.\\
+
+  Thusly, if $y$ is uniform, then $y' = f(y)$ is also uniform over $\{0, 1\}^L$, and therefore:
+  \begin{equation*}
+    \Pr[\A \text{outputs } 1 | \exp 1] = \Pr_{r \leftarrow \{0, 1\}^L}[\A'(r) = 1].
+  \end{equation*}
+
+  The advantage of $\A$ in distinguishing between the $G$'s will then be
+  \begin{equation*}
+    \PRGadv[\A, G] = |\Pr[\A \text{outputs } 1 | \exp 0] - \Pr[\A \text{outputs } 1 | \exp 1] = \PRGadv[\A', G']
+  \end{equation*}
+
+  Basically, since $\A$ is efficent, $\A'$ should be able to also have some non-negligible advantge against $G'$, making $\A$ also be non-negligible to $G$. But, $G$ is a secure PRG, and thusly no efficent adversary could even crack this. This contradicts the point that $\A'$ coul exist, and thus it doesn't, also proving that $G'$ is also secure.
+\end{solution}
+
+ 
+\begin{problem}
+  In this problem you'll show that  secure PRG $G: \{0, 1\}^n \to \R$ can become insecure if the seed is not uniformly random in $\S$.
+\end{problem}
+\begin{ppart} (20 points)
+  Consider PRG $G_a: \{0, 1\}^{n + 1} \to \R \times \{0, 1\}$ defined as $G_a(s) = G(s_1s_2 \ldots s_{n}) \parallel s_{n+1}$, where $s_1s_2\ldots s_{n+1}$ is the bit decomposition of $s$. Show that $G_a$ is a secure PRG assuming $G$ is secure.
+\end{ppart}
+\begin{solution}
+Your solution goes here
+\end{solution}
+\begin{ppart} (15 points)
+  Show that $G_a$ is insecure if its random seed is chosen so that its last bit is always 0. Demonstrate an adversary and compute its advantage.
+\end{ppart}
+\begin{solution}
+Your solution goes here
+\end{solution}
+\begin{ppart} (15 points)
+  Construct a secure PRG $G_c: \{0, 1\}^{n + 1} \to \R \times \{0, 1\}$ that becomes insecure if its seed $s$ is chosen so that the \emph{parity} of the bits in $s$ is always $0$ (where parity is defined as the XOR of all the bits). Hint: a small change to $G_a$ is all you need here. Note that you will need to prove two separate facts: that $G_c$ is secure when its seed is uniform, and that $G_c$ is insecure when when the parity of the bits of $s$ is 0. Both of these proofs can use the previous parts, even if you have not solved them.
+\end{ppart}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+\begin{problem} (20 points)
+
+Let $G : \left\{0,1 \right\}^n \to \R$ be a secure PRG, and consider $G'$ defined as $G'(s) = G(s) \parallel G(s+1)$. Prove that  $G'$ is not necessarily a secure PRG. \textit{(Hint: Use problem 3a.)}
+\end{problem}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+
+\end{document}
+
+
