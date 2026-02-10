@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.19)  9 FEB 2026 13:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.19)  9 FEB 2026 19:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1099,7 +1099,57 @@ Underfull \hbox (badness 10000) in paragraph at lines 177--179
 
  []
 
-[4] [5] (./ps3.aux)
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 212--214
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--220
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 221--222
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 246--248
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 246--248
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 253--255
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 265--266
+
+ []
+
+[5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 280--282
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 286--288
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 302--303
+
+ []
+
+[7] [8] (./ps3.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1108,30 +1158,33 @@ Package rerunfilecheck Info: File `ps3.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 34267 strings out of 476182
- 690954 string characters out of 5795595
- 1941975 words of memory out of 5000000
- 55544 multiletter control sequences out of 15000+600000
- 639733 words of font info for 147 fonts, out of 8000000 for 9000
+ 34311 strings out of 476182
+ 691889 string characters out of 5795595
+ 1943975 words of memory out of 5000000
+ 55552 multiletter control sequences out of 15000+600000
+ 642439 words of font info for 167 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 108i,10n,112p,1000b,1044s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 108i,10n,112p,1000b,1045s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb>
 </usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/symbols/msam10.pfb>
-Output written on ps3.pdf (5 pages, 396345 bytes).
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symb
+ols/msam10.pfb>
+Output written on ps3.pdf (8 pages, 419598 bytes).
 PDF statistics:
- 151 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
- 7 named destinations out of 1000 (max. 500000)
+ 175 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
+ 13 named destinations out of 1000 (max. 500000)
  44729 words of extra memory for PDF output out of 51595 (max. 10000000)
+
+595 (max. 10000000)
 

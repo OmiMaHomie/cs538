@@ -210,7 +210,66 @@ Suppose $\Adv$ in Attack Game 3.1 uses the following strategy. Choose a random $
 \end{ppart}
 
 \begin{solution}
-Your solution goes here
+  Firstly, let me just construct and define $G_c$ as the following: \\
+
+  For $s = s_1 \ldots s_{n+1} \in \{0, 1\}^{n + 1}$, let 
+  \begin{equation*}
+    G_c(s) = G(s_1 \ldots s_n) || (\underset{i = 1}{\overset{n  +1}{\bigoplus}}s_i).
+  \end{equation*}
+  where $G : \{0, 1\}^n \to \R$ is a secure PRG, and the XOR symbol just being XOR from bottom to top. This equation is basically saying that $G_c$ with reutnr a pseudornd string, $G(s_1 \ldots s_n)$, with a single parity bit appended to the end of the seed.\\
+
+  Now, asuppose $G$ is a secure PRG, then I can prove that $G_c$ is also secure with this problem's seed, $s \in^{R} \{0, 1\}^{n+1}$.\\
+
+  Let $\A$ be our efficent adversary for $G_c$. Then, $\B$ will be our other efficent adversary for $G$, where
+  \begin{itemize}
+    \item $\B$ gets a string $z \in^{R} \R$ from the challenger ($z = G(x)$, for a uniform $x$ if it's $\exp 0$, or just random $z$ for $\exp 1$).
+    \item $\B$ then chooses an independent uniform bit, $p \leftarrow \{0, 1\}$.
+    \item $\B$ will then output $(z, p)$ to $\A$, and then return the output of $\A$.
+  \end{itemize}
+
+  \textbf{Exp 0}\\
+In this case, $z = G(x)$ for uniform $x \in^R \{0, 1\}^n$. Then, $(z, p)$ will then be distributed in the same manner to $G_c(s)$, for a uniform $s$. This is because, I coul write $s = (x, s_{n + 1})$ with $x$ being uniform an $s_{n + 1}$ being both uniform and independent. Then, the parity bit will be , $\underset{i = 1}{\overset{n + 1}{\bigoplus}}s_i = (\underset{i = 1}{\overset{n}{\bigoplus}}x_i) \oplus s_{n + 1}$. \\
+Given $x$, this bit is uniform since $s_{n + 1}$ is also uniform. Morever, the parity bit is independent of $x$ (since for any fixe $x$, it's also uniform). So then therefore, the pair, $(G(x), \text{parity})$, will then have to have the same distribution as $(G(x), p)$, where $p$ is independent and uniform. Thus, the Pr of this case is
+\begin{equation*}
+  \Pr_{s \leftarrow \{0, 1\}^{n + 1}}[\A(G_c(s)) = 1].
+\end{equation*}
+
+\textbf{Exp 1}\\
+In this case, $z$ is just uniform over $\R$, and $p$ is both uniform and independent. So, $(z, p)$ are both uniform over $\R \times \{0, 1\}$. And thus,
+\begin{equation*}
+  \Pr[\B \text{ outputs } 1 | \exp 1] = \Pr_{(r, b) \leftarrow \R \times \{0, 1\}}[\A(r, b) = 1].
+\end{equation*}
+
+So then therefore, the PRGadv will be
+\begin{equation*}
+  \PRGadv[\B, G] = |\Pr[\B \text{ outputs } 1 | \exp 0] - \Pr[\B \text{ outputs } 1 | \exp 1] = \PRGadv[\A, G_c].
+\end{equation*}
+And since $G$ is secure, $\PRGadv[\B, G]$ will be negligible, thus showing that $\PRGadv[\A, G_c]$ also being neglibigle for efficent $\A$, so then $\therefore G_c$ is secure, \textbf{But only if we're using uniform seeds.}\\\\
+
+
+Consider the case now where the seed, $s$ is chosen uniform from the set, such that
+\begin{equation*}
+  \{s \in \{0, 1\}^{n+1} : \underset{i = 1}{\overset{n+1}{\bigoplus}}s_i = 0 \}.
+\end{equation*}
+For any such $s$, the parity bit (being the last bit for $G_c(s)$) will then ALWAYS be 0. Therefore, $G_c(s) = (G(s_1 \ldots s_n), 0)$.\\
+
+Now let $\A$ be a distinguisher $G_c$ from random values with a non-negligible advantage. It would work as such:
+\begin{itemize}
+  \item $\A$ gets pair $(z, b) \in \R \times \{0, 1\}$.
+  \item If $b = 0$, output 1 ("real")
+  \item If not, output 0 ("random")
+\end{itemize}
+
+For \textbf{Exp 0}, The challenger will pick $s$ uniformly from seeds with parity 0, and then return that, $G_c(s) = (G(x), 0)$, where $x$ are the first $n$ bits. Thus, the last bit is ALWAYS 0, meaning that $\A$ will always output 1 (probability 1).
+
+For \textbf{Exp 1}, The challenge will then pick $(r, b)$ uniformly over $\R \times \{0, 1\}$. Thusly, $\Pr[b = 0] = \frac{1}{2}$, so $\A$ will output 1 with a probability of just $\frac{1}{2}$.\\
+
+
+Therefore the PRGAdv becomes
+\begin{equation*}
+  \PRGadv[\A, G_c] = |1 - \frac{1}{2}| = \frac{1}{2}, 
+\end{equation*}
+Which is like again a non-negligible (const) advantage, meaning that $G_c$ would then become insecure \textbf{if the seeds are forced to be of parity 0.}
 \end{solution}
 
 \begin{problem} (20 points)
@@ -219,9 +278,48 @@ Let $G : \left\{0,1 \right\}^n \to \R$ be a secure PRG, and consider $G'$ define
 \end{problem}
 
 \begin{solution}
-Your solution goes here
-\end{solution}
+Suppose the following \textit{counterexample}: a specific secure PRG \(G\) such that \(G'\) is insecure.\\
 
+Let \(H: \{0,1\}^{n-1} \to \mathcal{R}_0\) be a secure PRG (this type of PRG should be valid). Then we can define \(G: \{0,1\}^n \to \mathcal{R}_0 \times \{0,1\}\) to be 
+\[
+G(s) = H(s_1 \dots s_{n-1}) \parallel s_n,
+\]  
+where \(s = s_1 \dots s_n\). From the previous Problem, 3(a), \(G\) it's already been proven that this is a secure PRG.\\
+
+Now consider \(G'(s) = G(s) \parallel G(s+1)\), where \(s+1\) denotes incrementing \(s\) as an \(n\)-bit integer modulo \(2^n\). Then I could write \(s = x \parallel b\) with \(x \in \{0,1\}^{n-1}\) and \(b \in \{0,1\}\).
+
+\begin{itemize}
+  \item If \(b = 0\) : \(s = x0\), so \(s+1 = x1\). Then  
+        \[
+        G(s) = H(x) \parallel 0, \quad G(s+1) = H(x) \parallel 1.
+        \]
+  \item If \(b = 1\) : \(s = x_1\), so \(s+1 = (x+1)0\). Then  
+        \[
+        G(s) = H(x) \parallel 1, \quad G(s+1) = H(x+1) \parallel 0.
+        \]
+\end{itemize}
+
+Thus, in \(G'(s) = G(s) \parallel G(s+1)\), the last bit of the first half (all the way to \(L+1\), where \(L\) is the length of the output, \(H\)) equals \(b\), and the last bit of the second half (to \(2(L+1)\)) equals \(1-b\). Basically, these two bits are always different.\\
+
+Now let's make an adversary \(\mathcal{A}\) for \(G'\) as follows. For the input of \(y \in \{0,1\}^{2(L+1)}\):
+\begin{enumerate}
+\item Let \(a\) be the bit at position \(L+1\) (the last bit of the first half).
+\item Let \(a'\) be the bit at position \(2(L+1)\) (the last bit of the second half).
+\item If \(a \neq a'\), output 1 (guess “real”); otherwise output 0 (guess “random”).
+\end{enumerate}
+
+Comparing the 2 experiments:
+\begin{itemize}
+\item \textbf{Experiment 0 (real):} The challenger will pick \(s \leftarrow \{0,1\}^n\), and then return \(y = G'(s)\). Since \(a\) and \(a'\) are always different, \(\mathcal{A}\) outputs 1 always (probability 1).
+\item \textbf{Experiment 1 (random):} Now the challenger will pick \(y \leftarrow \{0,1\}^{2(L+1)}\) uniformly. Then \(a\) and \(a'\) are independent uniform bits, so then \(\Pr[a \neq a'] = \frac{1}{2}\). Therefore, \(\mathcal{A}\) probability to output 1 will be \(\frac{1}{2}\).
+\end{itemize}
+
+Therefore,
+\[
+\operatorname{PRGadv}[\mathcal{A}, G'] = \left| 1 - \frac{1}{2} \right| = \frac{1}{2},
+\]
+which is non-negligible (a const like again). Thus, \(G'\) is not a secure PRG.
+\end{solution}
 
 \end{document}
 
