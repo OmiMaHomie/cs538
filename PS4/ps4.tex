@@ -382,8 +382,38 @@ I got it (plz trust me!!!) I know from my spanish dormmate (who studies French) 
 	\end{ppart}
 	
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+    So by using~\eqref{thm:division} to initialize the proof, this question will basically use modular exponentation and that minimality property of $k$ to prove the underlying question of this problem.\\
+
+    \noindent Let $k = \ord(a)$, meaning that
+    \begin{itemize}
+        \item $k > 0$ is the smallest int that satisfies $a^k \equiv_p 1$, and
+        \item For all ints $0 < j < k$, we'll have $a^j \not\equiv_p 1$.
+    \end{itemize}
+
+    \noindent By (b), I alr know that $a^{p-1} \equiv_p 1$. And since $k > 0$, by~\eqref{thm:division}, there exists unique ints $q, r$ such that 
+    \begin{equation*}
+        p-1 kq+r \text{ where } 0 \leq r < k.
+    \end{equation*}
+
+    \noindent Now by computing $a^{p-1}$ by using the decomposition of $a^r \mod p$, I get 
+    \begin{equation*}
+        a^{p-1} = a^{kq + r} = (a^k)^q \times a^r \equiv_p 1^q \times a^r \equiv_p a^r.
+    \end{equation*}
+    \noindent But since (b) shows us how $a^{p-1} \equiv_p 1$, then 
+    \begin{equation*}
+        a^r \equiv_p 1.
+    \end{equation*}
+
+    \noindent Now by the minimality of $k = \ord(a)$, 
+    \begin{itemize}
+        \item If $r > 0$, then this could contradict the minimality of $k$ (since $r < k$, but also $a^r \equiv_p 1$).
+        \item $\therefore r = 0$.
+    \end{itemize}
+
+    \noindent Since $r = 0$, the division equation becomes $p - 1 = kq$, which then means that $k | (p-1)$.\\
+
+    \noindent $\therefore$ the order of any element $a \in Z^*_p$ will divide by $p - 1$.
 \end{solution}
 	
 	\begin{ppart}
@@ -392,7 +422,27 @@ Your solution goes here
 	
 	
 \begin{solution}
-Your solution goes here
+    This is just a result of the problem we proved from (d), or of the minimality of $k$. If any 2 powers $a^i, a^j$, with $0 \leq j < k$, were equal modulo $p$, then we should be able to derive a contradiction to the minimality of $k$.\\
+
+    \noindent Assume, for contradiction, that 2 distinct powers were congruent modulo $p$. That is, suppose there exists ints $i, j$ such that:
+    \begin{itemize}
+        \item $0 \leq i < j \leq k - 1$, and
+        \item $a^i \equiv_p a^j$.
+    \end{itemize}
+
+    \noindent Now, since $a \in \Z^*_p$ and $p$ is prime, we'll have $\gcd(a, p) = 1$. By constantly applying~\eqref{thm:extended-euclidean}, $a^i$ will then also have  multiplicative inverse modulo $p$. \textit{Specifically}, since $\gcd(a, p) = 1$, there should exist $s \in \Z$ such that $as \equiv_p 1$. Then, $(a^i)(s^i) \equiv_p 1$, so then therefore $s^i$ is also a multiplicative inverse of $a^i \mod p$.\\
+
+    \noindent Now multiply both sides of $a^i \equiv_p a^j$ with this inverse:
+    \begin{equation*}
+        \begin{aligned}
+            a^i \times (a^i)^{-1} \equiv_p a^j \times (a^j)^{-1} \mod p \\
+            1 \equiv_p a^{i-j} \mod p
+        \end{aligned}
+    \end{equation*}
+
+    \noindent Now, since $j-i>0$ (since $j>i$), and $j-i<k$ (since $j \leq k-1$ and $i \geq 0$), then therefore $0 < j-1 < k$ and $a^{j-i} \equiv_p 1$. BUT, this contradicts the initial definition of $k = \ord(a)$ as the SMALLEST + INT satisfying $a^k \equiv_p 1$.\\
+
+    \noindent $\therefore$ our assumption is false, and the original statement must be true.
 \end{solution}
 
 	
