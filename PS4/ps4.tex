@@ -1,0 +1,369 @@
+\documentclass[12pt]{article}
+
+\newif\ifsol
+\soltrue
+
+\include{macros}
+
+\begin{document}
+\begin{center}
+\Large{\textbf{CAS CS 538.  \ifsol Solutions to \fi Problem Set 4}}\\
+\smallskip
+\large{\textbf{Due electronically via gradescope, \textcolor{red}{Tuesday February 17}, 2026 11:59pm
+}}\\
+\large{\textbf{Om Khadka, U51801771}}
+\end{center}
+
+\noindent
+
+\begin{problem} (34 points)
+Problem 3.2 from Boneh-Shoup.
+Let $\E = (E, D)$ be a cipher defined over $(\K, \M, \C)$ where $\K \subseteq \M$. Let $\E' = (E', D')$ be a cipher where encryption is defined as $E'((k_1, k_2), m) := (E(k_1, k_2), E(k_2, m))$. Show that if $\E$ is semantically secure then so is $\E'$. Note that problem is analogous to problem 3 on problem set 1, replacing perfect secrecy with  semantic security.
+
+\noindent\textbf{Hint}: use a hybrid argument with two intermediate games between Semantic Security Experiment 0 and Semantic Security Experiment 1. You will need to define two other games; let's call them Game h0 and Game h1 (``h'' is for ``hybrid'') . Then you will have three separate proofs: 
+\begin{itemize}
+\item Semantic Security Experiment 0 is indistinguishable from Game h0.
+\item Game h0 is indistinguishable from Game h1. 
+\item Game h1 is indistinguishable from Semantic Security Experiment 1.
+\end{itemize}
+We suggest denoting by $p_0, p_{h0},  p_{h1}, p_1$ the probability that the adversary outputs 1 in each of the games.
+
+Each of these three proofs will be, itself, a reduction. Recall that a reduction itself has two parts: an algorithm and an analysis of advantage (which consists of computing two probabilities and subtracting them). The probability computations will be very simple in this problem. \end{problem}
+\begin{solution}
+The solution to this proof will be (like the hint stated) done via chaining the various changes we do in the encryption scheme, proving and reducing each part until we end up with the final product. By proving each part of the chain is semantically secure, I can prove via transitivity that the end-product will then also be secure.\\
+
+\noindent Let $\E$ be the defined cipher stated above. Then, $\E'$ will defined as the following:
+\begin{itemize}
+    \item Key space is $\K' = \K \times \K$
+    \item Encrpytion is $\E'((k_1, k_2), m) = (\E(k_1, k_2), E(k_2, m))$
+\end{itemize}
+
+\noindent Let $\A$ be some efficent adversay, that'll attack the semantic security of $\E'$. I will now split this game up into 4 games, bounded to $\A$'s advantage. Also, fix some element $k_0 \in \K$ (since $\K \neq \theta$).
+\begin{itemize}
+    \item $(\E(k_1, k_2), \E(k_2, m_0))$
+    \begin{itemize}
+        \item Game 0; The actual $\E'$ experiment.
+    \end{itemize}
+    \item $(\E(k_1, k_0), \E(k_2, m_0))$
+    \begin{itemize}
+        \item Game 1; Encrypting with $k_0$ instead of $k_2$
+    \end{itemize}
+    \item $(\E(k_1, k_0), \E(k_2, m_1))$
+    \begin{itemize}
+        \item Game 2; Encrypting $m_1$ instead of $m_0$
+    \end{itemize}
+    \item $(\E(k_1, k_2), \E(k_2, m_1))$
+    \begin{itemize}
+        \item Game 3; Actual $\E'$ experiment, but now with $m_0$.
+    \end{itemize}
+\end{itemize}
+Let $W_j$ denote the chance that $\A$ outputs 1 in game $j$. Then, by the triangle inequality:
+\begin{equation*}
+    \SSadv[\A, \E'] = |\Pr[W_0] - \Pr[W_3]| \leq |\Pr[W_0] - \Pr[W_1]| + |\Pr[W_1] - \Pr[W_2]| + |\Pr[W_2] - \Pr[W_3]|
+\end{equation*}
+I'll go into the reduction of each term to prove $\E$'s semantic security.\\\\
+
+\textbf{Game 0 $\approx$ Game 1}\\
+Let $\B_1$ be an adversary attaking $\E$:
+\begin{itemize}
+    \item Gets challenge ciphertext $c*$ from $\E'$ (either $k_2, k_0$).
+    \item Samples $k_2 \leftarrow \K$ independently.
+    \item Computes $c_2 \leftarrow \E(k_2, m_0)$.
+    \item Gives $(c*, c_2)$ to $\A$.
+    \item Outputs the result of $\A$.
+\end{itemize}
+Looking at this now, note two key things. Firstly, if $c* = \E(k_1, k_2)$, then $\B_1$ simulates Game 0 perfectly. Also, if $c* = \E(k_1, k_0)$, $\B_1$ will then also simulate Game 1 perfectly. Thus,
+\begin{equation*}
+    |\Pr[W_0] - \Pr[W_1]| = \SSadv[\B_1, \E]
+\end{equation*}
+
+\textbf{Game 1 $\approx$ Game 2}\\
+Now let $\B_2$ attack $\E$:
+\begin{itemize}
+    \item Gets challenge ciphertext $c^*$ from $\E'$ (either $m_0, m_1$ under key of $k_2$).
+    \item Samples $k_1 \leftarrow \K$ independently.
+    \item Computes $c_1 \leftarrow \E(k_1, k_0)$.
+    \item Gives $(c_1, c^*)$ to $\A$.
+    \item Outputs result of $\A$.
+\end{itemize}
+Now look at this game. If $c^* = \E(k_2, m_0)$, then $\B_2$ will perfectly simulate Game 1. In the same manner, if $c^* = \E(k_2, m_1)$, then $\B_2$ will perfectly simulate Game 2. Thus,
+\begin{equation*}
+    |\Pr[W_1] - \Pr[W_2]| = \SSadv[\B_2, \E]
+\end{equation*}
+
+\textbf{Game 2 $\approx$ Game 3}\\
+Let $\B_3$ attack $\E$ now (symmetric to $\B_1$ btw).
+\begin{itemize}
+    \item Gets challenge ciphertext $c^*$ from $\E'$ (either $k_0, k_2$).
+    \item Samples $k_2 \leftarrow \K$ independently, then compute $c_2 \leftarrow \E(k_2, m_1)$.
+    \item Give $(c^*, c_2)$ to $\A$.
+    \item Output result of $\A$.
+\end{itemize}
+This game also ends up with a similar result as the previous games; If $c^* = \E(k_1, k_0)$, then $\B_3$ simulates Game 2 perfectly, and if $c^* = \E(k_1, k_2)$, then $\B_3$ simulates Game 3 perfectly. Thus,
+\begin{equation*}
+    |\Pr[W_2] - \Pr[W_3]| = \SSadv[\B_3, \E]
+\end{equation*}
+
+\noindent By combining these 3 bounds:
+\begin{equation*}
+    \SSadv[\A, \E'] \leq \SSadv[\B_1, \E] + \SSadv[\B_2, \E] + \SSadv[\B_3, \E]
+\end{equation*}
+And since $\E$ is semantically secure, then each $\SSadv[\B_i, \E]$ will then be negligible. Thus, the sum wil lalso be neglibile, and $\therefore$ $\SSadv[\A, \E']$ is negligible from all efficent $\A$, proving the initial statement.
+\end{solution}
+ 
+
+\newpage
+
+
+\begin{problem} 
+\textbf{NOTE: We are postponing this problem. This problem will appear on Discussion 5 on Feb 18; a different problem related to the symmetric ratchet will appear on the next homework assignment. So if you have done this problem, you have not wasted time.}
+
+    The Signal protocol is the most widely used end-to-end encrypted messaging protocol in the world, used by over a billion people daily. It's the core cryptography underneath WhatsApp, Google Messages, Facebook Messenger, and the eponymous Signal app.
+
+    An important property Signal provides is \textit{forward secrecy}: each time a message is sent, the encryption key is changed so that message remains hidden from this moment forward, even if an attacker obtains future encryption keys.  The mechanism Signal uses to update the keys is called a \textit{symmetric ratchet}\footnote{The full Signal protocol is sometimes called the double ratchet protocol, because it interleaves a symmetric ratchet with another mechanism called an asymmetric ratchet. The asymmetric ratchet provides backwards security, meaning that messages are secure from key compromises that occurred in the past.}. The core ingredients to a symmetric ratchet are a PRG $G$ and a semantically secure cipher $(\Enc, \Dec)$.
+
+\begin{figure}[h]
+    \centering
+\begin{minipage}{0.45\textwidth}
+    
+\fbox{    
+\begin{tikzpicture}[
+    node distance=2cm,
+    box/.style={
+        rectangle,
+        draw,
+        minimum width=1cm,
+        minimum height=1cm,
+        align=center,
+        fill=black!10,
+        rounded corners
+    },
+    arrow/.style={
+        -{Stealth[length=2mm]},
+        thick
+    }
+]
+
+\node[box] (chain1) {$G$};
+\node[box, below=2cm of chain1] (chain2) {$G$};
+\node[box, below=2cm of chain2] (chain3) {$G$};
+
+\node[box, right=3cm of chain1, yshift=-1.6cm, minimum width=1.5cm] (enc1) {$\Enc$};
+\node[box, right=3cm of chain2, yshift=-1.6cm, minimum width=1.5cm] (enc2) {$\Enc$};
+\node[box, right=3cm of chain3, yshift=-1.6cm, minimum width=1.5cm] (enc3) {$\Enc$};
+
+\draw[arrow] ($(chain1.north) + (-0.2,0.8)$) node[above, xshift=0.4cm] {$s_0 \samples \S$} -- ($(chain1.north) + (-0.2,0)$);
+\draw[arrow] ($(chain1.south) + (-0.2,0)$) -- ($(chain2.north) + (-0.2,0)$) 
+    node[left, midway] {$s_1$};
+\draw[arrow] ($(chain2.south) + (-0.2,0)$) -- ($(chain3.north) + (-0.2,0)$)
+    node[left, midway] {$s_2$};
+\draw[arrow] ($(chain3.south) + (-0.2,0)$) -- +(0,-0.8)
+    node[left] {$s_3$};
+
+\draw[arrow] ($(chain1.south) + (0.2,0)$) to[out=270,in=180] node[above, midway] {$k_1$} (enc1.west);
+\draw[arrow] ($(chain2.south) + (0.2,0)$) to[out=270,in=180] node[above, midway] {$k_2$} (enc2.west);
+\draw[arrow] ($(chain3.south) + (0.2,0)$) to[out=270,in=180] node[above, midway] {$k_3$} (enc3.west);
+
+\draw[arrow] ($(enc1.north) + (0,0.5)$) node[above] {$m_1$} -- (enc1.north);
+\draw[arrow] ($(enc2.north) + (0,0.5)$) node[above] {$m_2$} -- (enc2.north);
+\draw[arrow] ($(enc3.north) + (0,0.5)$) node[above] {$m_3$} -- (enc3.north);
+
+\draw[arrow] (enc1.east) -- ++(0.8,0) node[right] {$c_1$};
+\draw[arrow] (enc2.east) -- ++(0.8,0) node[right] {$c_2$};
+\draw[arrow] (enc3.east) -- ++(0.8,0) node[right] {$c_3$};
+
+\node[below=0.7cm of chain3, xshift=-0.2cm] {$\textbf{\vdots}$};
+
+\end{tikzpicture}
+}
+\end{minipage}
+\hfill
+\begin{minipage}{0.52 \textwidth}
+\centering
+\titlecodebox{Symmetric Ratchet}{
+    $s_0 \samples \S$\\
+    for $i \gets 1$ to $\infty$:\\
+    \> $(s_i, k_i) \gets G(s_{i-1})$\\
+    \> Delete $s_{i-1}$ from memory\\
+    \> Use $k_i$ to encrypt/decrypt the $i$-th message\\
+    \> Delete $k_i$ from memory
+}
+\end{minipage}
+\caption{The Signal symmetric ratchet}
+\end{figure}
+
+When Alice and Bob want to communicate with a symmetric ratchet, they begin by agreeing on a uniformly random PRG seed $s_0$. If Alice is sending the first message, she runs the seed $s_0$ through $G$ to obtain a new seed $s_{1}$ as well as a key $k_{1}$. She encrypts her message under $k_1$ with $\Enc$ and send the ciphertext to Bob. Now Bob runs his copy of $s_0$ through $G$ to learn the same key $k_1$ and decrypt the message. This process can repeat essentially forever: with each new message, Alice and Bob use the PRG to update their state and produce a fresh encryption key. Every time Alice or Bob updates their state with $G$, they delete the previous state and key from memory. This ensures that if they are compromised, the attacker only learns the current state. 
+
+This mechanism is called a \textit{ratchet} because it's easy to advance the state forward, but it's hard to recover a previous state once you've deleted it from memory. 
+
+\end{problem}
+
+    In this problem you'll show that the symmetric ratchet has a property necessary for forward secrecy: specifically, that there is no efficient way to learn a past key given a later state and key. (This property is necessary, but not sufficient, because what you really want is that past encryptions are still semantically secure; but we are giving you a simpler problem here.)  Let $G: \left\{0,1 \right\}^\ell \to \left\{0,1 \right\}^{2\ell}$ be a secure PRG. For all $n\in \mathbb{N}$, let $G^{\, n} : \left\{0,1 \right\}^\ell \to \left\{0,1 \right\}^{(n+1)\ell}$ be the $n$-wise sequential composition of $G$, i.e. 
+
+\begin{figure}[h]
+\centering    
+    \titlecodebox{$G^{\, n}(s)$}{
+\>  $s_0 \gets s$\\
+\> for $i\gets 1$ to $n$:\\
+\> \> $(k_i, s_i) \gets G(s_{i-1})$\\
+\> output $(k_1, \ldots, k_n, s_n)$
+}
+\end{figure}
+
+
+Prove that there does not exist a PPT algorithm $\Adv$ such that $\Pr[\Adv(k_n, s_n) == k_{n-1}]$ is non-negligible, when $k_n, s_n,$ and $k_{n-1}$ are values produced by $G^n$ with a random seed. 
+
+\textit{You can use the fact that $G^{\, n}$ is a secure PRG, as proven in section 3.4.2 of the textbook. Suppose there exists such an algorithm $\Adv$, and use it to construct an adversary that breaks the PRG game for $G^{\, n}$.}
+    
+
+\begin{solution}
+\textit{Skipped for now.}
+\end{solution}
+
+
+\newpage
+
+ 
+\begin{problem} (66 points, at 8 each except (c) which is 2)
+
+
+
+Your proofs for this problem may rely only on the theorems we provide below (note the optional references to their proofs in Shoup's \underline{A Computational Introduction to Number Theory and Algebra} \url{https://shoup.net/ntb})
+and problems from Discussion 3, which is posted also under Piazza resources.
+In particular, you may not (and do not need to) invoke other theorems from number theory or abstract algebra. When proving each part, it may be very helpful to use previous parts. The parts will be graded independently, so you can use the previous parts even if you have not solved them. 
+
+
+\begin{theorem}[Division theorem, Shoup Theorem 1.4]
+  \label{thm:division}
+  Let $a, b \in \Z$ with $b > 0$.
+  Then there exists unique $q, r \in \Z$ such that $a = bq + r$ and $0 \le r < b$.
+  ($q$ is called ``quotient'' and $r$ is called ``remainder''.)
+\end{theorem}
+
+A \emph{divisor} $d$ of $a$ is any integer $d$ such that there exists an integer $q$ with $qd=a$. A \emph{common} divisor of $a$ and $b$ is an integer that is a divisor of $a$ and a divisor of $b$. 
+
+\begin{theorem}[Greatest common divisor theorem, Shoup Theorem 1.7]
+  \label{thm:gcd}
+  Let $a, b \in \Z$. Unless $a=b=0$, the set of common divisors of $a$ and $b$ has a maximum, called the greatest common divisor of $a$ and $b$ and denoted by $\gcd(a, b)$. We will say that $a$ and $b$ are \emph{relatively prime} whenever $\gcd(a, b)=1$.
+\end{theorem}
+\begin{theorem}[Shoup Theorem 4.4]
+  \label{thm:extended-euclidean}
+  Let $a, b \in \Z$.
+  The \emph{extended Euclidean algorithm} computes $d, s, t \in \Z$ in time polynomial in $\log a \cdot \log b$, such that $d = \gcd(a, b)$ and
+  \begin{equation}
+    \label{eq:bezout}
+    as + bt = d.
+  \end{equation}
+\end{theorem}
+
+
+Equation \eqref{eq:bezout} is also known as the B\'ezout's identity, and the integers $s$ and $t$ are called B\'ezout's coefficients for $(a, b)$.
+
+Thus, if $a$ and $n$ are relatively prime, then Extended Euclidean Algorithm gives us $s$ and $t$ such that $as+nt=1$, so $as = 1-nt \equiv_n 1$, and therefore $s \bmod n\in \Z_n$ is the number that, when multiplied by $a$, is congruent to 1 modulo $n$. We will call $s$ a \emph{multiplicative inverse of $a$ modulo $n$}, write $s=a^{-1}\bmod n$, and, when working modulo $n$, we will use the term ``divide by $a$'' to mean ``multiply by $s$'' (just like in arithmetic over real numbers).
+
+Note that division does not always exist --- it exists if and only if $a$ and $n$ are relatively prime. 
+
+
+
+
+	Let $p$ be a prime. Since every element of $\Z_p^*$ is relatively prime with $p$ whenever $p$ is prime, inverses for elements of $\Z_p^*$ always exist.
+	
+	\begin{ppart} Prove that for any integer $a\in \Z_p^*$, the values
+		$a, 2a, 3a, ..., (p - 1)a$ (all reduced modulo $p$) hit every element
+		in the set $\Z_p^* = \{1, 2, 3, \dots, p-1\}$ exactly once.
+    
+    \emph{Hint: think of multiplication by $a$ modulo $p$ as a function. The statement is simply asking you to prove that it is a bijection. Since the domain and the target are finite and of the same size, it suffices to prove that it is a surjection (onto) or injection (1-to-1). You can choose whether to prove surjectivity or injectivity, and them simply write ``a surjective (respectively, injective) function between domain and range of the same finite size is bijective.'' The existence of multiplicative inverses proven could be useful.}
+	\end{ppart}
+	
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+	
+	
+	
+	\begin{ppart}
+		Fermat's little theorem: prove that for any $a \in \Z_p^*$, $a^{p - 1} \equiv_p 1$.
+    (Or equivalently, $a^{p - 1} = 1$ if you consider multiplications modulo $p$. Here, we write $\equiv_p$ to emphasize the underlying modulus.)
+%		if $a\not\equiv_p 0 $, then $a^{p-1} \equiv_p 1 $.
+		
+    \emph{Hint: multiply together the $(p-1)$ values
+		$a, 2a, 3a, \dots, (p-1)a$ and use part (a).}
+	\end{ppart}
+	
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+	
+	
+	\begin{ppart} Watch this video \url{https://www.youtube.com/watch?v=sB8vIbsssUo}. Pronounce Fermat correctly as the video explains. We will give you two points on an honor system if you tell us you did it.
+	\end{ppart}
+	
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+	
+
+	\begin{ppart}
+	Let $a \in \Z_p^*$. The \emph{order} of $a$, denoted by $\ord(a)$ is the smallest positive integer $k$ such that $a^k \equiv_p 1$. Prove that $k$ divides $p-1$.
+  
+  \emph{Hint: do a proof by contradiction. Let $p-1 = kq+r$, where $q, r \in \Z$ and $0\le r < k$ by the division theorem. Consider $a^r$.}
+	\end{ppart}
+	
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+	
+	\begin{ppart}
+	Again, let $\ord(a) = k$. Prove that the $k$ powers of $a$ modulo $p$ (namely \{$1=a^0, a=a^1, a^2, \dots, a^{k-1}\})$ are all distinct. 
+	\end{ppart}
+	
+	
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+	
+	\begin{ppart}
+		Prove that if the order of $a$ is $k$ and $x\equiv_k y$ for some integers $x$ and $y$, then $a^x \equiv_p a^y$ (note the different subscripts of $\equiv$).
+	\end{ppart}
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+	
+	
+	\begin{ppart}
+		Prove the converse of part (f): if the order of $a$ is $k$ and  $a^x \equiv_p a^y$ for some integers $x$ and $y$, then $x\equiv_k y$ (note the different subscripts of $\equiv$). Thus combining this part and the previous part, you know that for any $a$ of order $k$, exponents work modulo $k$.
+	\end{ppart}
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+
+\begin{ppart}
+Let $b=a^x\bmod p$. Let $c$ be the multiplicative inverse of $b$. Prove that $c$ is a nonnegative power of $a$: that is, prove that there exists a nonnegative integer $y$ such that $a^y\equiv_pc$.
+\end{ppart}
+
+	
+	\begin{solution}
+Your solution goes here
+\end{solution}
+
+
+\begin{ppart}
+Suppose $g$ has order $p-1$ (we know such a $g$ exists for any prime $p$, though we have not proven this fact). Suppose $k \,|\, p-1$. We want to show that there exists an element of order $k$. Specifically, show that $g_k:=g^{(p-1)/k}$ has order $k$.
+\end{ppart}
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+
+For any $k$ that divides $p-1$, we can consider the set $G_k$ of powers of $g_k$. This set has size $k$ (because powers of $g_k$ repeat after $k$ multiplications by $g_k$). Multiplying elements of $G_k$ gives you other elements of $G_k$ (because $g_k^x\cdot g_k^y=g_k^{x+y}$), as does dividing (by part (h)). Thus, $G_k$ is  a \underline{cyclic group of order $k$}: ``cyclic'' because it consists of all the powers of one element $g_k$, ``group'' because it is closed under multiplication and division, ``of order $k$'' because it contains $k$ elements. We will use such groups throughout the semester. The value $g_k$ is called a \emph{generator} of $G_k$, and $G_k$ is sometimes denoted by $\langle g_k\rangle$.
+\end{problem}
+
+
+\end{document}
