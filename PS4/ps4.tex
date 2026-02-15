@@ -522,8 +522,27 @@ Let $b=a^x\bmod p$. Let $c$ be the multiplicative inverse of $b$. Prove that $c$
 \end{ppart}
 
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+    For this question, since $a^k \equiv_p 1$, where $k = \ord(a)$, the inverse of $a^x$ is just $a^{k-x}$ since $a^x \times a^{k-x} = a^k \equiv_p 1$. Also from (f) (g), we alr know that exponents will work mod $k$, so its always possible to find a non-neg num. $y \in \{0, 1, \ldots, k-1\}$ for the exponent $k-x$.\\
+
+    \noindent Let $k = \ord(a)$, so $a^k \equiv_p 1$ and the minimality property of $k$ is implied from prev. problems. By~\eqref{thm:division}, there'll exist ints $q, r$ such that $x = kq+r \text{ where } 0 \leq r < k$.\\
+
+    \noindent By (f), since $x \equiv_k r$, then $a^x \equiv_p a^r$.\\
+
+    \noindent Now looking at $a^{k-r}$, we can compute:
+    \begin{equation*}
+        a^r \times a^{k-r} = a^k \equiv_p 1.
+    \end{equation*}
+    \noindent Thus $a^{k-r}$ is just a multiplicative inverse of $a^r \mod p$, and since $a^x \equiv_p a^r$ and multiplicative inverses modulo a prime are unique (from~\eqref{thm:extended-euclidean}), $a^{k-r}$ is also the multiplicative inverse of $a^x$. Therefore $c \equiv_p a^{k-r}$.\\
+
+    \noindent Now I'll show that $k-r$ can be replaced by a non-neg. exponent in $\{0, 1, \ldots, k-1\}$:
+    \begin{itemize}
+        \item \textbf{Case 1: $r = 0$}\\ Then, $k-r = k$, but $a^k \equiv_p 1 = a^0$ by def. of order. So then $c \equiv_p a^0$, so we can just take $y = 0$.
+        \item \textbf{Case 2: $r > 0$}\\ Then $0 < k-r < k$, so $y = k-r$, which is alr a non-neg. int in $\{1, 2, \ldots, k-1\}$.
+    \end{itemize}
+    \noindent In both cases, there'll exist a non-neg. int $y \in \{0, 1, \ldots, k-1\}$, such that $a^y \equiv_p c$.\\
+
+    \noindent Therefore the multiplicative inverse of any power of $a$ is itself a non-neg. power of $a$.
 \end{solution}
 
 
@@ -531,7 +550,39 @@ Your solution goes here
 Suppose $g$ has order $p-1$ (we know such a $g$ exists for any prime $p$, though we have not proven this fact). Suppose $k \,|\, p-1$. We want to show that there exists an element of order $k$. Specifically, show that $g_k:=g^{(p-1)/k}$ has order $k$.
 \end{ppart}
 \begin{solution}
-Your solution goes here
+    Ok so this final question kinda has 2 parts to it. Since $g$ has maximal order of $p-1$, then rising it to the power of $(p-1)/k$ will essentially `compress' its cycle length to be $k$. Then the rest is just showing how $(g_k)^k \equiv_p 1$, and how no smaller + exponent $j < k$ can satisfy $(g_k)^j \equiv_p 1$ (order divides AND is exactly $k$).\\
+
+    \noindent Let $d = \ord(g_k)$, so $d$ is the smallest + int such that $(g_k)^d \equiv_p 1$. I'll now show how $d=k$.\\
+
+    \noindent Computing $(g_k)^k$ gets us the following:
+    \begin{equation*}
+        (g_k)^k = (g^{(p-1)/k})^k = g^{(p-1)/k \times k} = g^{p-1}.
+    \end{equation*}
+    \noindent By (b), $g^{p-1} \equiv_p 1$, so:
+    \begin{equation*}
+        (g_k)^k \equiv_p 1.
+    \end{equation*}
+    \noindent And by (a), then $d | k$.\\
+
+    \noindent By the def. of $(g_k)^d \equiv_p 1$, we get:
+    \begin{equation*}
+        (g^{(p-1)/k})^d \equiv_p 1 \rightarrow g^{d(p-1)/k} \equiv_p 1.
+    \end{equation*}
+    \noindent And because $\ord(g) = p-1$, (d) tells us tht $p-1$ divides any exponent yielding 1 modulo $p$, therefore:
+    \begin{equation*}
+        p-1 | \frac{d(p-1)}{k}.
+    \end{equation*}
+    \noindent This means that there exist an int, $q$, such that:
+    \begin{equation*}
+        \frac{d(p-1)}{k} = q(p-1).
+    \end{equation*}
+    \noindent And since $p-1 > 0$, then we can divide both sies by $p-1$ to get:
+    \begin{equation*}
+        \frac{d}{k} = q \rightarrow d = qk.
+    \end{equation*}
+    \noindent $\therefore k | d$.\\
+
+    \noindent Since I've shown that we get both $d | k, k | d$, and since $d, k$ are both + ints, this implies that $d=k$. $\therefore \ord(g_k)=k$.
 \end{solution}
 
 
