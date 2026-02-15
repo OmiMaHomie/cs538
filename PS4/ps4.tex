@@ -257,7 +257,7 @@ A \emph{divisor} $d$ of $a$ is any integer $d$ such that there exists an integer
 \end{theorem}
 
 
-Equation \eqref{eq:bezout} is also known as the B\'ezout's identity, and the integers $s$ and $t$ are called B\'ezout's coefficients for $(a, b)$.
+Equation~\eqref{eq:bezout} is also known as the B\'ezout's identity, and the integers $s$ and $t$ are called B\'ezout's coefficients for $(a, b)$.
 
 Thus, if $a$ and $n$ are relatively prime, then Extended Euclidean Algorithm gives us $s$ and $t$ such that $as+nt=1$, so $as = 1-nt \equiv_n 1$, and therefore $s \bmod n\in \Z_n$ is the number that, when multiplied by $a$, is congruent to 1 modulo $n$. We will call $s$ a \emph{multiplicative inverse of $a$ modulo $n$}, write $s=a^{-1}\bmod n$, and, when working modulo $n$, we will use the term ``divide by $a$'' to mean ``multiply by $s$'' (just like in arithmetic over real numbers).
 
@@ -276,8 +276,30 @@ Note that division does not always exist --- it exists if and only if $a$ and $n
 	\end{ppart}
 	
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+    \noindent Firstly, I define the function $f_a : \Z^*_p$ by $f_a(x) = ax \mod p$. To show that the values $a, 2a, \ldots, (p - 1)a$ hit every element of $\Z^*_p$ exactly once, I'll just prove how $f_a$ is injective. Since $Z^*_p$ is finite, and $|Z^*_p| = p-1$, this should be enough to prove how $f_a$ is ultimately a bijection.\\
+
+    \noindent Now, let $x, y \in Z^*_p$ such that $f_a(x) = f_a(y)$ (basically that $ax \equiv_p ay$). Then, 
+    \begin{equation*}
+        ax - ay \equiv_p 0 \rightarrow a(x - y) \equiv_p 0.
+    \end{equation*}
+
+    \noindent And since $a \in Z^*_p$, and $p$ is prime, then the $\gcd(a, p) = 1$ by the definition of $Z^*_p$. By~\eqref{thm:extended-euclidean}, there should exist ints $s, t$ such that:
+    \begin{equation*}
+        as + pt = 1.
+    \end{equation*}
+
+    \noindent And since reducing modulo $p$ gives $as \equiv_p 1$, then $s$ is a multiplicative inverse of $a \mod p$.
+
+    \noindent Multiplying both sides of $a(x - y) \equiv_p 0$ by $s$ gives the following:
+    \begin{equation*}
+        s \times a(x - y) \equiv_p s \times 0 \rightarrow (sa)(x - y) \equiv_p 0 \rightarrow 1 \times (x - y) \equiv_p 0.
+    \end{equation*}
+    And thus, $x \equiv_p y$. Since $x, y \in \{1, 2, \ldots, p-1\}$, then I can conclude that $x = y$.\\
+
+    \noindent $\therefore f_a$ is injective, and since $f_a$ is an injective function from a finite set to itself (of equal cardinality), it is then ALSO a bijection.\\
+
+    \noindent Thus, we prove the original statement.
 \end{solution}
 	
 	
@@ -292,8 +314,55 @@ Your solution goes here
 	\end{ppart}
 	
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+    This problem will have to utilize Theorems~\eqref{thm:gcd} and~\eqref{thm:extended-euclidean}, to prove parts of the mathematics for this. I'll also use the result from (a) to show the bijection/permutation property of this problem.\\
+
+    \noindent Let $p$ be prime, and $a \in Z^*_p = \{1, 2, \ldots, p-1\}$.\\
+
+    \noindent By (a), the map $x \mapsto ax \mod p$ is a bijection on $Z^*_p$. Therefore, the sets of
+    \begin{equation*}
+        \{1, 2, \ldots, p-1\} \text{ and } \{a \times 1, a \times 2, \ldots, a \times (p-1)\} (\mod p)
+    \end{equation*}
+    will have exactly the same elements (just in a different order).\\
+
+    \noindent Taking the product of all elements in each set, and by reducing modulo $p$, 
+    \begin{equation*}
+        1 \times 2 \times \ldots (p - 1) \equiv_p (a \times 1) \times (a \times 2) \times \ldots (a \times (p - 1))
+    \end{equation*}
+    The left-hand side effectively becomes $(p - 1)!$, meaning I can simlify the right-hand side to be
+    \begin{equation*}
+        a^{p-1} \times (1 \times 2 \times \ldots (p - 1)) = a^{p-1} \times (p - 1)!
+    \end{equation*}
+    And therefore 
+    \begin{equation*}
+        (p - 1)! \equiv_p a^{p-1} \times (p - 1)! \indent \mod p
+    \end{equation*}
+
+    \noindent Now, since $p$ is prime, and every factor in $(p - 1)!$ is strictly less than $p$, then non of these factor can be divisble by $p$. By~\eqref{thm:gcd}, the GCD will exist, and therefore
+    \begin{equation*}
+        \gcd((p - 1)!, p) = 1
+    \end{equation*}
+
+    \noindent By~\eqref{thm:extended-euclidean}, since $\gcd((p-1)!, p) = 1$, then there will exist ints $s, t$ such that
+    \begin{equation*}
+        s \times (p-1)! + t \times p = 1
+    \end{equation*}
+    \noindent And by reducing this equation mod $p$, you'll get
+    \begin{equation*}
+        s \times (p-1)! \equiv_p 1  \mod p
+    \end{equation*}
+    \noindent This then shows how $s$ is  multiplicative inverse of $(p-1)! \mod p$.\\
+
+    \noindent Now multiplying both sides of the equation by $s$, I get
+    \begin{equation*}
+        \begin{aligned}
+            s \times (p-1)! \equiv_p s \times a^{p-1} \times (p-1)! \mod p \\
+            1 \equiv_p a^{p-1} \times 1 \mod p \\
+            a^{p-1} \equiv_p 1
+        \end{aligned}
+    \end{equation*}
+
+    $\therefore$ I have shown the proof for Fermat's Little Theorem.
 \end{solution}
 	
 	
@@ -301,8 +370,8 @@ Your solution goes here
 	\end{ppart}
 	
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+I got it (plz trust me!!!) I know from my spanish dormmate (who studies French) that typically the last letter in words in French are usually vocally omitted, so it sounds more like `Fear-maa', with no `t' sound.
 \end{solution}
 	
 
