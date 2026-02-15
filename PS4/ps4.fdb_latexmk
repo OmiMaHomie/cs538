@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1771190511.11299 "/home/omimahomie/cs538/PS4/ps4.tex" "ps4.pdf" "ps4" 1771190512.34665 0
+["pdflatex"] 1771192068.87189 "/home/omimahomie/cs538/PS4/ps4.tex" "ps4.pdf" "ps4" 1771192070.09956 0
   "/etc/texmf/web2c/texmf.cnf" 1757970215.13359 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/omimahomie/cs538/PS4/ps4.tex" 1771190508.49615 25673 11bfd40750cf246e6ff97ed9821dca5f ""
+  "/home/omimahomie/cs538/PS4/ps4.tex" 1771192066.23325 28653 88c3ca5fdf6a578687e024d7c22ec8cf ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc" 1490131464 2921 8ca0eb0831f9bc5da080d3697cfe67bf ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc" 1490131464 2933 9ad527ce78d7c5fa0a642dead095f172 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc" 1490131464 2934 a4a9158faed2e9e89c771b4e3b7fc12f ""
@@ -262,9 +262,9 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1758299484 6800788 4be6de6288c377fb30682838bc8197af ""
   "macros.tex" 1770753048 9454 0f77996d654af392bd5b911ef4d0fb99 ""
   "pipetex.sty" 1768594788 4462 d9bbd963d0b8d71753442fb3fb8dc06b ""
-  "ps4.aux" 1771190512.02949 861 9d47ae288f2dd449e135b6e6cfaa0f53 "pdflatex"
-  "ps4.out" 1771190511.71211 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "ps4.tex" 1771190508.49615 25673 11bfd40750cf246e6ff97ed9821dca5f ""
+  "ps4.aux" 1771192069.78563 861 4f9416d8c9413dfbc222c79df5c4864a "pdflatex"
+  "ps4.out" 1771192069.46504 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "ps4.tex" 1771192066.23325 28653 88c3ca5fdf6a578687e024d7c22ec8cf ""
   (generated)
   "ps4.aux"
   "ps4.log"

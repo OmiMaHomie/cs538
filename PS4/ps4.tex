@@ -450,8 +450,28 @@ I got it (plz trust me!!!) I know from my spanish dormmate (who studies French) 
 		Prove that if the order of $a$ is $k$ and $x\equiv_k y$ for some integers $x$ and $y$, then $a^x \equiv_p a^y$ (note the different subscripts of $\equiv$).
 	\end{ppart}
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+    Well now here, the congruence of mod $k$ really means that $x, y$ differ by a multiple of $k$. And since $a^k \equiv_p 1$ by the def. of order, then any multiple of $k$ in the exponent should contribute a factor of $1 \mod p$, leaving the value unchanged.\\
+
+    \noindent Assume $x \equiv_k y$. By the def. of congruence modulo $k$, then this means that $k | (x-y)$. Equivalently, there will exist an int $q$ such that:
+    \begin{itemize}
+        \item $x-y=kq$, or
+        \item $x=y+kq$.
+    \end{itemize}
+
+    \noindent Now computing $a^x \mod p$ using this decomposition:
+    \begin{equation*}
+        a^x = a^{y+kq} = a^y \times a^{kq} = a^y \times (a^k)^q.
+    \end{equation*}
+    \noindent And since $k = \ord(a)$, by def. we have $a^k \equiv_p 1$. Therefore, 
+    \begin{equation*}
+        (a^k)^q \equiv_p 1^q \equiv_p 1.
+    \end{equation*}
+    \noindent Subbing this back gets us:
+    \begin{equation*}
+        a^x \equiv_p a^y \times 1 \equiv_p a^y.
+    \end{equation*}
+    \noindent $\therefore a^x \equiv_p a^y$ whenever $x \equiv_k y$.
 \end{solution}
 	
 	
@@ -459,8 +479,42 @@ Your solution goes here
 		Prove the converse of part (f): if the order of $a$ is $k$ and  $a^x \equiv_p a^y$ for some integers $x$ and $y$, then $x\equiv_k y$ (note the different subscripts of $\equiv$). Thus combining this part and the previous part, you know that for any $a$ of order $k$, exponents work modulo $k$.
 	\end{ppart}
 	
-	\begin{solution}
-Your solution goes here
+\begin{solution}
+    Ok well this is just the inverse of the last problem. Where the last problem shows how congruent exponents mod $k$ yield the same mod $p$, this is now asking to show how congruent powers mod $p$ have to come from congruent exponents mod $k$.\\
+
+    \noindent Assume $a^x \equiv_p a^y$. Just assume $x \geq y$ (if not, just swap the vars; the arguement is symmetric).\\
+
+    \noindent Since $a \in \Z^*_p$ and $p$ is prime, we get $\gcd(a, p) = 1$. By the use of~\eqref{thm:extended-euclidean}, $a^y$ will have a multiplicative inverse modulo $p$. And because of this, there'll exist $s \in \Z$ such that $as \equiv_p 1$. Then $(a^y)(s^y) \equiv_p 1$, and therefore $s^y$ is a multiplicative inverse of $a^y \mod p$.\\
+
+    \noindent Multiplying both sides with this inverse:
+    \begin{equation*}
+        \begin{aligned}
+            a^x \times (a^y)^{-1} \equiv_p a^y \times (a^y)^{-1} \mod p \\
+            a^{x-y} \equiv_p 1 \mod p
+        \end{aligned}
+    \end{equation*}
+
+    \noindent By~\eqref{thm:division} to $x-y, k$, with $k > 0$, There'll exist unique ints $q, r$ such that:
+    \begin{equation*}
+        x-y = kq+r \text{ where } 0 \leq r < k.
+    \end{equation*}
+
+    \noindent Computing $a^{x-y} \mod p$ w/ this decomposition gets us:
+    \begin{equation*}
+        a^{x-y} = a^{kq+r}=(a^k)^q \times a^r \equiv_p 1^q \times a^r \equiv_p a^r.
+    \end{equation*}
+    \noindent But since we've alr established that $a^{x-y} \equiv_p 1$, then:
+    \begin{equation*}
+        a^r \equiv_p 1.
+    \end{equation*}
+
+    \noindent By the def. of $k = \ord(a)$, and since $0 \leq r < k$, the only possiblity for $r$ is $r = 0$, since otherwise $r$ would be a smaller + exponent yielding 1, contradicting miniality.\\
+
+    \noindent $\therefore x-y=kq$, which means $k | (x-y)$. By def. of congruence modulo $k$, this mens that:
+    \begin{equation*}
+        x \equiv_k y.
+    \end{equation*}
+    \noindent And therefore, if $a^x \equiv_p a^y$, then $x \equiv_k y$.
 \end{solution}
 
 \begin{ppart}
