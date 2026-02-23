@@ -53,9 +53,8 @@ Use a hybrid argument to prove that $\E^1$ is semantically secure against leaked
 
 \begin{solution}
 The whole idea behind how I'll prove this by essentially splitting up the whole process into a bunch of hybrid arguments, and showing how the sum of all of the reductions end up being negligible.
-    
-\section*{Proof}
-
+\\
+\\
 Let $G^n: \{0, 1\}^\ell \to \{0, 1\}^{(n+1)\ell}$ be the $n$-wise sequential composition of $G$, outputting $(k_1, s_1, \dots, k_n, s_n)$. Also assume that $G$ is a secure PRG, thereby also meaning that $G^n$ is also secure.
 
 \subsection*{The Hybrid Games}
@@ -182,8 +181,42 @@ We can talk about the exponent $x$ being even since $p - 1$ is even, and therefo
 Clearly if $x$ is even, then
 $a$ has a square root $g^{x/2}$ modulo $p$.  Now show the converse: if $a$ has
 a square root modulo $p$, then $x$ is even. \textit{(Hint: you can rewrite any element $b\in \mathbb{Z}_p^\ast$ as $b=g^y$ for some $y \in \mathbb{Z}_{p-1}$.)}\end{ppart}
+
 \begin{solution}
-Your solution goes here
+I can't really explain the way I'll solve this proof without just restating the proof, but I will say that this soltuion basically involves just doing a bunch of substitution, "technically".\\\\
+
+\noindent Firstly, assume that $a$ has a sqrt modulo $p$. Now let $r \in \Z_p^*$ be such that $r^2 \equiv_p a$.\\
+
+\noindent Since $g$ is a generator of $\Z_p^*$, then every element in $\Z_p^*$ can be represented as a power of $g$. Therefore, there exists some $y \in \Z_{p-1}$ such that $r = g^y$.\\
+
+\noindent Substituting this into the square root equation:
+\begin{equation}
+a \equiv_p r^2 \equiv_p (g^y)^2 \equiv_p g^{2y}.
+\end{equation}
+
+\noindent Also, since we know that $a = g^x$, then that also means:
+\begin{equation}
+g^x \equiv_p g^{2y}.
+\end{equation}
+
+\noindent Since $g$ has multiplicative order $p-1$ in $\Z_p^*$, then we have:
+\begin{equation}
+x \equiv 2y \pmod{p-1}.
+\end{equation}
+
+\noindent This ultimately means that there exists some integer $k$ such that:
+\begin{equation}
+x = 2y + k(p-1).
+\end{equation}
+
+\noindent Now observe:
+\begin{itemize}
+\item $2y$ is even (it is a multiple of 2).
+\item $p-1$ is even (since $p > 2$ is an odd prime).
+\item Therefore $k(p-1)$ is even for any int $k$.
+\end{itemize}
+
+\noindent And since $x$ is the sum of two even numbers, $x$ must be even. QED.
 \end{solution}
 
 It'd be nice to check if a value is a square modulo $p$ without having to explicitly know what power of $g$ it is. Luckily we have the following test: $a$ is a square iff $a^{(p-1)/2} \equiv_p 1$.
@@ -193,7 +226,28 @@ It'd be nice to check if a value is a square modulo $p$ without having to explic
 \end{ppart}
 
 \begin{solution}
-Your solution goes here
+Like again, these are one of those convoluted math-substitution problems, where I just gotta go back to rules to solve it. But I think this particular question does rely on Fermat's little theorem.\\
+
+\noindent Being by assuming that $a$ is a square modulo $p$. Theb by its definition, there exists some $r \in \Z_p^*$ such that $r^2 \equiv_p a$.\\
+
+\noindent Like I said before, every element can be written as a power of $g$. Thus, $\exists y \in \Z_{p-1}, r = g^y$.\\
+
+\noindent Now by subbing this into the equation for $a$, we have:
+\begin{equation}
+a \equiv_p r^2 \equiv_p (g^y)^2 \equiv_p g^{2y}.
+\end{equation}
+
+\noindent Calcuating $a^{(p-1)/2}$:
+\begin{equation}
+a^{(p-1)/2} \equiv_p (g^{2y})^{(p-1)/2} \equiv_p g^{2y \cdot \frac{p-1}{2}} \equiv_p g^{y(p-1)}.
+\end{equation}
+
+\noindent And now, by Fermat's Little Theorem, since $g \in \Z_p^*$, then it must be the case that $g^{p-1} \equiv_p 1$. Therefore:
+\begin{equation}
+g^{y(p-1)} \equiv_p (g^{p-1})^y \equiv_p 1^y \equiv_p 1.
+\end{equation}
+
+\noindent Thus, I have shwon that if $a$ is a square, then $a^{(p-1)/2} \equiv_p 1$.
 \end{solution}
 
 

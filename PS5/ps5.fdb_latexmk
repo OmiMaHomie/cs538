@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1771807593.45249 "/home/omimahomie/cs538/PS5/ps5.tex" "ps5.pdf" "ps5" 1771807594.40997 0
+["pdflatex"] 1771870010.28985 "/home/omimahomie/cs538/PS5/ps5.tex" "ps5.pdf" "ps5" 1771870011.22271 0
   "/etc/texmf/web2c/texmf.cnf" 1757970215.13359 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/omimahomie/cs538/PS5/ps5.tex" 1771807593.16092 12978 97eed10377f33a213132489d9fe55bd5 ""
+  "/home/omimahomie/cs538/PS5/ps5.tex" 1771870010.04187 15311 12a28fc25593f5f54a24cc7d4c54eba7 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc" 1490131464 2921 8ca0eb0831f9bc5da080d3697cfe67bf ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc" 1490131464 2933 9ad527ce78d7c5fa0a642dead095f172 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc" 1490131464 2934 a4a9158faed2e9e89c771b4e3b7fc12f ""
@@ -37,10 +37,13 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1.tfm" 1490131464 19920 63bb3db95807ffe45b0900d104896325 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1248133631 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1248133631 36741 fa121aac0049305630cf160b86157ee4 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1248133631 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1248133631 32722 d7379af29a190c3f453aba36302ff5a9 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1248133631 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
@@ -261,9 +264,9 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1758299484 6800788 4be6de6288c377fb30682838bc8197af ""
   "macros.tex" 1771182100 9558 00faa80805cca8f15376f3b21529e9b1 ""
   "pipetex.sty" 1768249917 4462 d9bbd963d0b8d71753442fb3fb8dc06b ""
-  "ps5.aux" 1771807594.31371 706 bbc9bd61a3016a1f9e0e1ae765227348 "pdflatex"
-  "ps5.out" 1771807594.07771 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "ps5.tex" 1771807593.16092 12978 97eed10377f33a213132489d9fe55bd5 ""
+  "ps5.aux" 1771870011.12859 706 6116e62f02d05ff3a97e5d412cd7738f "pdflatex"
+  "ps5.out" 1771870010.9036 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "ps5.tex" 1771870010.04187 15311 12a28fc25593f5f54a24cc7d4c54eba7 ""
   (generated)
   "ps5.aux"
   "ps5.log"

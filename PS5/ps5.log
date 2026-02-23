@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.19)  22 FEB 2026 19:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.19)  23 FEB 2026 13:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1092,7 +1092,12 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 6.0pt on input line 50.
 
-Overfull \hbox (2.17204pt too wide) in paragraph at lines 59--60
+Underfull \hbox (badness 10000) in paragraph at lines 54--59
+
+ []
+
+
+Overfull \hbox (2.17204pt too wide) in paragraph at lines 54--59
 \T1/LinuxLibertineT-TLF/m/n/12 (-20) Let $\OML/cmm/m/it/12 G[] \OT1/cmr/m/n/12 
 : \OMS/cmsy/m/n/12 f\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 1\OMS/c
 msy/m/n/12 g[] ! f\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 1\OMS/cms
@@ -1104,17 +1109,17 @@ eT-TLF/m/n/12 (-20) .
  []
 
 LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF
- on input line 117.
+ on input line 116.
 (/usr/share/texlive/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/
 LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 117.
-LaTeX Font Info:    TS1-m encoding encountered on input line 117.
+(Font)              scaled to size 12.0pt on input line 116.
+LaTeX Font Info:    TS1-m encoding encountered on input line 116.
 
 
-Package mmap Warning: !!! No .cmap file found for TS1 !!!  on input line 117.
+Package mmap Warning: !!! No .cmap file found for TS1 !!!  on input line 116.
 
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxLibertineT-TLF' (encoding: TS1).
@@ -1123,17 +1128,51 @@ Package microtype Info: Loading generic protrusion settings for font family
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sl' in size <12> not a
 vailable
 (Font)              Font shape `T1/LinuxLibertineT-TLF/m/it' tried instead on i
-nput line 170.
+nput line 169.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 12.0pt on input line 170.
+(Font)              scaled to size 12.0pt on input line 169.
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-
 dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{/usr/share/texlive/texmf-dist/f
 onts/enc/dvips/libertine/lbtn_76gpa5.enc}
 
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{/usr/
 share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}] [2] [3{/us
-r/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}] [4] [5] 
-[6] (./ps5.aux)
+r/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}] [4]
+Underfull \hbox (badness 10000) in paragraph at lines 185--187
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 185--187
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 188--189
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 190--191
+
+ []
+
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 228--230
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 231--232
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--234
+
+ []
+
+[6] [7] (./ps5.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1142,11 +1181,11 @@ Package rerunfilecheck Info: File `ps5.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 35790 strings out of 476182
- 733344 string characters out of 5795595
+ 35818 strings out of 476182
+ 733934 string characters out of 5795595
  1962975 words of memory out of 5000000
- 56952 multiletter control sequences out of 15000+600000
- 654502 words of font info for 179 fonts, out of 8000000 for 9000
+ 56955 multiletter control sequences out of 15000+600000
+ 656124 words of font info for 191 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  108i,7n,112p,1000b,1057s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb>
@@ -1155,19 +1194,22 @@ Here is how much of TeX's memory you used:
 /usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/s
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/symbols/msbm10.pfb>
-Output written on ps5.pdf (6 pages, 384247 bytes).
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msa
+m10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm
+10.pfb>
+Output written on ps5.pdf (7 pages, 413622 bytes).
 PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
- 128 compressed objects within 2 object streams
- 40 named destinations out of 1000 (max. 500000)
+ 224 PDF objects out of 1000 (max. 8388607)
+ 149 compressed objects within 2 object streams
+ 47 named destinations out of 1000 (max. 500000)
  48825 words of extra memory for PDF output out of 51595 (max. 10000000)
 
-0)
+
 
