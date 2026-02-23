@@ -306,7 +306,45 @@ Show that if $\left(g^x\right )^2\equiv_p a$, then $\left
 $g^x\not \equiv_p g^{x+(p-1)/2}$.
 \end{ppart}
 \begin{solution}
-Your solution goes here
+In order to prove this, I will essentially have to do 2 things. Firstly, I'll nee to verify the 2nd root. And then, I'll need to prove its distinctness.\\
+
+\noindent I'll firstly prove that $g^{x+(p-1)/2}$ is also a square root of $a$. By computing the square of this value:
+\begin{equation}
+\left(g^{x+(p-1)/2}\right)^2 \equiv_p g^{2\left(x+(p-1)/2\right)} \equiv_p g^{2x + (p-1)}.
+\end{equation}
+
+\noindent By the laws of exponents:
+\begin{equation}
+g^{2x + (p-1)} \equiv_p g^{2x} \cdot g^{p-1} \equiv_p \left(g^x\right)^2 \cdot g^{p-1}.
+\end{equation}
+
+\noindent And by Fermat's Little Theorem, since $g \in \Z_p^*$, then $g^{p-1} \equiv_p 1$. Therefore:
+\begin{equation}
+\left(g^x\right)^2 \cdot g^{p-1} \equiv_p \left(g^x\right)^2 \cdot 1 \equiv_p a.
+\end{equation}
+
+\noindent Thus, $\left(g^{x+(p-1)/2}\right)^2 \equiv_p a$. \\
+
+\noindent Now, I'll show how these two square roots are distinct. Assume, for the sake of contradiction, that they are in fact the same:
+\begin{equation}
+g^x \equiv_p g^{x+(p-1)/2}.
+\end{equation}
+
+\noindent Now, since $g^x \in \Z_p^*$, it has a multiplicative inverse modulo $p$. By multiplying both sides by $(g^x)^{-1}$, we get:
+\begin{equation}
+1 \equiv_p g^{(p-1)/2}.
+\end{equation}
+
+\noindent But remember how $g$ is a generator of $\Z_p^*$ with multiplicative order $p-1$. THen by the defintion of its order, $g^k \equiv_p 1$ IFF $(p-1) \mid k$. And since $p > 2$, we know that $0 < (p-1)/2 < p-1$, meaning that $(p-1)$ does not divide $(p-1)/2$. Thusly:
+\begin{equation}
+g^{(p-1)/2} \not\equiv_p 1.
+\end{equation}
+
+\noindent And this is where the contradiction occurs. That then means, ultimately, that the two square roots must be distinct:
+\begin{equation}
+g^x \not\equiv_p g^{x+(p-1)/2}.
+\end{equation}
+
 \end{solution}
 
 \noindent
@@ -327,7 +365,64 @@ of $a$ and is often written as $\left(\frac{a}{p}\right)$. The Legendre symbol c
 \end{problem}
 
 \begin{solution}
-Your solution goes here
+Now in order to prove this, this also involves 2 parts. The first is showing how $g^{(p-1)/2} \equiv_p -1$. Then, I'll have to show how $b^{(p-1)/2} \equiv_p -1$ for non-squares specifically.\\
+
+\textbf{Getting $g^{(p-1)/2}\equiv_p -1$}
+
+\noindent Ok so we start off knowing that $g^{x+(p-1)/2}\equiv_p -g^x$. Then, by the laws of exponents, I can rewrite the left-hand side to be the following:
+\begin{equation}
+g^{x+(p-1)/2} \equiv_p g^x \cdot g^{(p-1)/2}.
+\end{equation}
+
+\noindent Now subbing this into the given relation:
+\begin{equation}
+g^x \cdot g^{(p-1)/2} \equiv_p -g^x.
+\end{equation}
+
+\noindent And by the properties of $g$, it is a fact that $g^x \in \Z_p^*$, which means $g^x$ has a multiplicative inverse modulo $p$. So then, by multiplying both sides by $(g^x)^{-1}$:
+\begin{equation}
+g^{(p-1)/2} \equiv_p -1.
+\end{equation}
+
+
+
+\textbf{$b^{(p-1)/2} \equiv_p -1$ for any non-square $b$.}
+
+\noindent Let $b \in \Z_p^*$ be a non-square. Now by the properties of $g$, we can write $b = g^y$ for some $y \in \Z_{p-1}$.\\
+
+\noindent By (a), I alr know that $b$ is a square IFF $y$ is even. And since $b$ is a non-square, $y$ must be odd. So I'll just write $y = 2k + 1$ for some int $k$.\\
+
+\noindent Now determine $b^{(p-1)/2}$:
+\begin{equation}
+b^{(p-1)/2} \equiv_p (g^y)^{(p-1)/2} \equiv_p g^{y \cdot \frac{p-1}{2}} \equiv_p g^{(2k+1) \cdot \frac{p-1}{2}}.
+\end{equation}
+
+\noindent Expand the exponent:
+\begin{equation}
+g^{(2k+1) \cdot \frac{p-1}{2}} \equiv_p g^{k(p-1) + \frac{p-1}{2}} \equiv_p g^{k(p-1)} \cdot g^{(p-1)/2}.
+\end{equation}
+
+\noindent And by Fermat's Little Theorem, we get $g^{p-1} \equiv_p 1$:
+\begin{equation}
+g^{k(p-1)} \equiv_p (g^{p-1})^k \equiv_p 1^k \equiv_p 1.
+\end{equation}
+
+\noindent Subbing this back:
+\begin{equation}
+b^{(p-1)/2} \equiv_p 1 \cdot g^{(p-1)/2} \equiv_p g^{(p-1)/2}.
+\end{equation}
+
+\noindent And from the first part, we showed that $g^{(p-1)/2} \equiv_p -1$. So then therefore:
+\begin{equation}
+b^{(p-1)/2} \equiv_p -1.
+\end{equation}
+
+\noindent This proves how, for any $a \in \Z_p^*$,
+\begin{itemize}
+\item If $a$ is a square, then $a^{(p-1)/2} \equiv_p 1$ (from (b)).
+\item And how, if $a$ is a non-square, then $a^{(p-1)/2} \equiv_p -1$.
+\end{itemize}
+
 \end{solution}
 
 \end{document}
