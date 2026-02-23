@@ -226,7 +226,7 @@ It'd be nice to check if a value is a square modulo $p$ without having to explic
 \end{ppart}
 
 \begin{solution}
-Like again, these are one of those convoluted math-substitution problems, where I just gotta go back to rules to solve it. But I think this particular question does rely on Fermat's little theorem.\\
+Like again, these are one of those convoluted math-substitution problems, where I just gotta go back to the rules to solve it. But I think this particular question does rely on Fermat's little theorem.\\
 
 \noindent Being by assuming that $a$ is a square modulo $p$. Theb by its definition, there exists some $r \in \Z_p^*$ such that $r^2 \equiv_p a$.\\
 
@@ -256,7 +256,37 @@ g^{y(p-1)} \equiv_p (g^{p-1})^y \equiv_p 1^y \equiv_p 1.
 \end{ppart}
 
 \begin{solution}
-Your solution goes here
+The solution to this problem will be, like the hint says, doing via a contradiction. Basically, assume that $a^{(p-1)/2} \pmod 1$, and eventually it'll become clear that this can't be.\\
+
+\noindent Assume that $a^{(p-1)/2} \equiv_p 1$ but that$a$ is \textbf{not} a square modulo $p$.\\
+
+\noindent Because of the property of $g$, we can write $a = g^x$ for some $x \in \Z_{p-1}$.\\
+
+\noindent By (a), we alreay know that that $a$ is a square IFF $x$ is even. Since I assumed $a$ is not a square, then $x$ must be odd. Therefore, I can write $x = 2k + 1$ for some int $k$.\\
+
+\noindent Now calculate $a^{(p-1)/2}$:
+\begin{equation}
+a^{(p-1)/2} \equiv_p (g^x)^{(p-1)/2} \equiv_p g^{x \cdot \frac{p-1}{2}} \equiv_p g^{(2k+1) \cdot \frac{p-1}{2}}.
+\end{equation}
+
+\noindent Expanding the exponent:
+\begin{equation}
+g^{(2k+1) \cdot \frac{p-1}{2}} \equiv_p g^{k(p-1) + \frac{p-1}{2}} \equiv_p g^{k(p-1)} \cdot g^{(p-1)/2}.
+\end{equation}
+
+\noindent And now, by Fermat's Little Theorem:
+\begin{equation}
+a^{(p-1)/2} \equiv_p 1 \cdot g^{(p-1)/2} \equiv_p g^{(p-1)/2}.
+\end{equation}
+
+\noindent However, since $g$ has multiplicative order $p-1$ in $\Z_p^*$, then it is also the case that $g^m \equiv_p 1$ IFF $(p-1) \mid m$. And since $0 < (p-1)/2 < p-1$, then we get:
+\begin{equation}
+g^{(p-1)/2} \not\equiv_p 1.
+\end{equation}
+
+\noindent This contradicts the initial assumption that $a^{(p-1)/2} \equiv_p 1$. Therefore, it must be false.\\
+
+\noindent Thus, if $a^{(p-1)/2} \equiv_p 1$, then $a$ is a square modulo $p$.
 \end{solution}
 
 
