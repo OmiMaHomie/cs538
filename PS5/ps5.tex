@@ -52,7 +52,121 @@ Use a hybrid argument to prove that $\E^1$ is semantically secure against leaked
 \end{problem}
 
 \begin{solution}
-Your solution goes here
+The whole idea behind how I'll prove this by essentially splitting up the whole process into a bunch of hybrid arguments, and showing how the sum of all of the reductions end up being negligible.
+    
+\section*{Proof}
+
+Let $G^n: \{0, 1\}^\ell \to \{0, 1\}^{(n+1)\ell}$ be the $n$-wise sequential composition of $G$, outputting $(k_1, s_1, \dots, k_n, s_n)$. Also assume that $G$ is a secure PRG, thereby also meaning that $G^n$ is also secure.
+
+\subsection*{The Hybrid Games}
+
+\begin{description}
+    \item[Game 0:] The initial real $\SSkeyleak$ game w/ bit $b=0$.
+    \begin{enumerate}
+        \item Challenger samples $s_0 \leftarrow \{0, 1\}^\ell$.
+        \item Calculates $(k_1, s_1, \dots, k_n, s_n) \gets G^n(s_0)$.
+        \item $\A$ then outputs $m_0, m_1$.
+        \item Challenger computes $c_{n-1} = \Enc(k_{n-1}, m_0)$.
+        \item Challenger then gives $(c_{n-1}, k_n, s_n)$ to $\A$.
+        \item $\A$ returns $\hat{b}$.
+    \end{enumerate}
+    Let $\Pr[W_0]$ denote the probability of $\A$ outputting $1$.
+
+    \item[Hybrid 1:] Same as Game 0, but but now the keys and seeds are replaced w/ rnd uniform values.
+    \begin{enumerate}
+        \item Challenger samples $(k_1, \dots, k_n, s_n) \leftarrow \{0, 1\}^{(n+1)\ell}$ uniformly at random.
+        \item $\A$ outputs $m_0, m_1$.
+        \item Challenger then Computes $c_{n-1} = \Enc(k_{n-1}, m_0)$.
+        \item Challenger will then give $(c_{n-1}, k_n, s_n)$ to $\A$.
+        \item $\A$ finlly returns $\hat{b}$.
+    \end{enumerate}
+    $\Pr[H_1]$ will be the probability of $\A$ outputting $1$.
+
+    \item[Hybrid 2:] Hybrid 1, but now the msg is $m_1$.
+    \begin{enumerate}
+        \item Challenger samples $(k_1, \dots, k_n, s_n) \leftarrow \{0, 1\}^{(n+1)\ell}$ uniformly at random.
+        \item $\A$ outputs $m_0, m_1$.
+        \item Challenger calcualtes $c_{n-1} = \Enc(k_{n-1}, m_1)$.
+        \item Challenger then gives $(c_{n-1}, k_n, s_n)$ to $\A$.
+        \item $\A$ returns $\hat{b}$.
+    \end{enumerate}
+    Let $\Pr[H_2]$ be the chance of $\A$ outputting $1$.
+
+    \item[Game 1:] Finally circling back to the $\SSkeyleak$ game, but now w/ bit $b=1$.
+    \begin{enumerate}
+        \item Challenger samples $s_0 \leftarrow \{0, 1\}^\ell$.
+        \item Compute $(k_1, s_1, \dots, k_n, s_n) \gets G^n(s_0)$.
+        \item $\A$ outputs $m_0, m_1$.
+        \item Challenger then calculates $c_{n-1} = \Enc(k_{n-1}, m_1)$.
+        \item Give that value, $(c_{n-1}, k_n, s_n)$, to $\A$.
+        \item $\A$ returns $\hat{b}$.
+    \end{enumerate}
+    Let $\Pr[W_1]$ be the probability of $\A$ outputting $1$.
+\end{description}
+
+By the triangle inequality, the advantage is then bounded by the following expression:
+\begin{equation}
+    \left| \Pr[W_0] - \Pr[W_1] \right| \leq \left| \Pr[W_0] - \Pr[H_1] \right| + \left| \Pr[H_1] - \Pr[H_2] \right| + \left| \Pr[H_2] - \Pr[W_1] \right|.
+\end{equation}
+
+\subsection*{Reducing and Analyzing}
+
+\paragraph{Game 0 $\to$ Game $H_1$}
+Let $\B_1$ be a new adversay against $G^n$.
+\begin{itemize}
+    \item $\B_1$ will recieve a challenge string $r \in \{0, 1\}^{(n+1)\ell}$ from $G^n$.
+    \item $\B_1$ will then parse $r$ as $(k_1, \dots, k_n, s_n)$.
+    \item $\B_1$ will run $\A$ to get $m_0, m_1$.
+    \item $\B_1$ then computs $c_{n-1} = \Enc(k_{n-1}, m_0)$.
+    \item Finally, $\B_1$ gives $(c_{n-1}, k_n, s_n)$ to $\A$ and its response.
+\end{itemize}
+Analyzing this:
+\begin{itemize}
+    \item If $r$ is outputted by $G^n(s_0)$, then this is just \textbf{Game 0}. So then $\Pr[\B_1 \to 1 \mid \text{Real}] = \Pr[W_0]$.
+    \item In the same manner, if $r$ is uniform random, then this is just \textbf{Hybrid 1}. Thus, $\Pr[\B_1 \to 1 \mid \text{Random}] = \Pr[H_1]$.
+\end{itemize}
+$|\Pr[W_0] - \Pr[H_1]| = \PRGadv[\B_1, G^n]$, which is negligible.
+
+\paragraph{Game $H_1$ $\to$ Game $H_2$}
+$\B_2$ will now be the adversay against the semantic security of $\E$.
+\begin{itemize}
+    \item $\B_2$ will run $\A$ to get $m_0, m_1$.
+    \item $\B_2$ then sends $m_0, m_1$ to the SS challenger for $\E$.
+    \item $\B_2$ will then get a ciphertext, $c^*$, from the challenger (which is just $\Enc(k^*, m_b)$ for a rnd key $k^*$).
+    \item $\B_2$ then samples $(k_n, s_n) \leftarrow \{0, 1\}^{2\ell}$ uniformly at random.
+    \item And then $\B_2$ will give $(c^*, k_n, s_n)$ to $\A$, and output its response.
+\end{itemize}
+Looking at this:
+\begin{itemize}
+    \item The key for the SS game, $c^*$, is rnd and independant of the leak. This is also the same distribution as $k_{n-1}$ back in \textbf{Hybrid 1} and \textbf{Hybrid 2}.
+    \item So then, if the SS challenger chooses $m_0$, then this is just \textbf{Hybrid 1}.
+    \item If instead the SS challenger chooses $m_1$, then it is just \textbf{Hybrid 2}.
+\end{itemize}
+$|\Pr[H_1] - \Pr[H_2]| = \SSadv[\B_2, \E]$, which is negligible.
+
+\paragraph{Game $H_2$ $\to$ Game 1}
+$\B_3$ will now be challenging the PRG security of $G^n$.
+\begin{itemize}
+    \item $\B_3$ gets a challenge string $r \in \{0, 1\}^{(n+1)\ell}$ from $G^n$.
+    \item $\B_3$ will parse $r$ as $(k_1, \dots, k_n, s_n)$.
+    \item $\B_3$ then runs $\A$ to gets $m_0, m_1$.
+    \item $\B_3$ computes $c_{n-1} = \Enc(k_{n-1}, m_1)$.
+    \item And finally, $\B_3$ gives $(c_{n-1}, k_n, s_n)$ to $\A$ and outputs its response.
+\end{itemize}
+Looking at this game:
+\begin{itemize}
+    \item If $r$ is outputted by $G^n(s_0)$, then this is just \textbf{Game 1}. This basically means that $\Pr[\B_3 \to 1 \mid \text{Real}] = \Pr[W_1]$.
+    \item If instead $r$ is uniform random, then this is just \textbf{Hybrid 2}, meaning that $\Pr[\B_3 \to 1 \mid \text{Random}] = \Pr[H_2]$.
+\end{itemize}
+$|\Pr[H_2] - \Pr[W_1]| = \PRGadv[\B_3, G^n]$, which is negligible.
+
+\subsection*{End}
+
+Combining the bounds, we get:
+\begin{equation}
+    \SSkeyleakadv[\A, \E^1] \leq \PRGadv[\B_1, G^n] + \SSadv[\B_2, \E] + \PRGadv[\B_3, G^n].
+\end{equation}
+I've already assumed, in the beginning, that $G^n$ was secure, making the PRG advantages negligible. Also, since $\E$ is semantically secure, then that also means that SS advantage is negligible. And since the sum of negligibles is negligble too, then $\therefore \SSkeyleakadv[\A, \E^1]$ is negligible.
 \end{solution}
 
 \newpage
