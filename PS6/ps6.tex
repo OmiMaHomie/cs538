@@ -1,0 +1,261 @@
+\documentclass[12pt]{article}
+
+\newif\ifsol
+\soltrue
+
+\include{macros}
+
+\begin{document}
+\begin{center}
+\Large{\textbf{CAS CS 538.  \ifsol Solutions to \fi Problem Set 6}}\\
+\smallskip
+\large{\textbf{Due \textcolor{red}{Thursday March 5}, 2026 11:59pm
+}}\\
+\large{\textbf{Om Khadka, U51801771}}
+\end{center}
+
+\noindent
+\textbf{How to submit:}  See instructions on Problem Set 1. 
+
+
+\begin{problem} (30 points total)
+Let $F$ be a secure PRF with $n$-bit strings for keys, inputs, and outputs.
+
+\begin{ppart} (5 points)
+Let $F_1(k,x)$ computed as follows: compute $F(k, x)$, append the last bit of $x$, and output the result. Prove that $F_1$ is insecure.
+\end{ppart}
+
+\begin{solution}
+The main idea behind this proof is the fact that the function, $F_1$ exposes a part of the input in its output. This can be exploited.
+
+\subsection*{Making the Game}
+Let $\A$ be the adversary that will play the game of distinguinish $F_1$ from just some rnd function.
+\begin{itemize}
+  \item $\A$ chooses any $x \in^R \{0, 1\}^n$
+  \item Push $x$ into $\text{Oracle}$, producing $y \in \{0, 1\}^{n+1}$
+  \item Now we check if $x[-1] = y[-1]$
+  \begin{itemize}
+    \item If YES, $\hat{b} = 1$
+    \item Else, $\hat{b} = 0$
+  \end{itemize}
+  \item Return $\hat{b}$ to challenger.
+\end{itemize}
+
+\subsection*{Analysis}
+Let $\PRFadv[\A, F_1] = |\Pr[W_0] - \Pr[W_1]|$ be the magnitude of difference of $\A$ outputting $1$ in either experiments $0, 1$.
+
+\paragraph{$\exp 0$: Using $F_1$}
+Assume that the challenger chooses $k \in^R \{0, 1\}^n$. In this experiment, the oracle is $F_1$. Then, by definition, the last bit of the output will ALWAYS be the last bit of $x$. Therefore $\hat{b} = 1$ always occurs.
+
+\paragraph{$\exp 1$: Using rnd}
+Now, the oracle is just a rnd func $R$. This means that every bit of $y$ is uniformly distributed and random to $x$'s bits. Thus, the chance of $\hat{b} = 1$ is $\frac{1}{2}$.
+
+\subsection*{Adv}
+Thus, the advantage for this game can be calculated as:
+\begin{equation*}
+  \PRFadv[\A, F_1] = |1 - \frac{1}{2}| = \frac{1}{2}
+\end{equation*}
+This is non-negligible, thus meaning that $F_1$ is insecure. $\qed$
+\end{solution}
+
+\begin{ppart} (5 points)
+Let $F_2(k,x)$ computed as follows: compute $F(k, x)$, append the last bit of $k$, and output the result. Prove that $F_2$ is insecure.
+\end{ppart}
+
+\begin{solution}
+This issue now is that the key is exposed in the output, which can be exploited.
+
+\subsection*{Game}
+$\A$ is playing to distinguish $F_2$ from a rnd function.
+\begin{itemize}
+  \item $\A$ chooses $x_1, x_2 \in^R \{0, 1\}^n$
+  \item Push $x_1, x_2$ to $\text{Oracle}$ to get $y_1, y_2 \in \{0, 1\}^n$
+  \item Now, check if $y_1[-1] == y_2[-1]$. This will set $\hat{b}$
+  \begin{itemize}
+    \item YES $\to 1$
+    \item ELSE $\to 0$
+  \end{itemize}
+  \item Return $\hat{b}$ to $\A$
+\end{itemize}
+
+\subsection*{Analysis}
+Let $\PRFadv[\A, F_2] = |\Pr[W_0] - \Pr[W_1]|$ be the magnitude of difference of $\A$ outputting $1$ in either experiments $0, 1$.
+
+\paragraph{$\exp 0$: Using $F_2$}
+Assume that the challenger chooses $k \in^R \{0, 1\}^n$. Denote $k_{\text{last}}$ to be the last bit of $k$. In this experiment, the oracle is $F_2$. Then, by definition, the last bit of outputs $y_i$ will ALWAYS equal to $k_{\text{last}}$. Therefore $\hat{b} = 1$ always occurs.
+
+\paragraph{$\exp 1$: Using rnd}
+Now, the oracle is just a rnd func $R$. This means that every bit of $y_i$ is uniformly distributed and random to $k$'s bits. Thus, the chance of $\hat{b} = 1$ is $\frac{1}{2}$.
+
+\subsection*{Adv}
+Thus, the advantage for this game can be calculated as:
+\begin{equation*}
+  \PRFadv[\A, F_2] = |1 - \frac{1}{2}| = \frac{1}{2}
+\end{equation*}
+This is non-negligible, thus meaning that $F_2$ is insecure. $\qed$
+\end{solution}
+
+\begin{ppart} (10 points)
+Define $F_3$  for $2n$-bit keys, $2n$-bit inputs, and $2n$-bit outputs, as follows: 
+\[
+F_3((k_1, k_2), (x_1, x_2))=F(k_1, x_1)|| F(k_2, x_2)\,,
+\]
+where $||$ denotes concatenation of strings. Prove that $F_3$ is insecure.
+\end{ppart}
+
+\begin{solution}
+  The main issue is that parts of the output are dependent on PARTS of the input. I can change just 1 part of the input, and not completely change the output.
+
+\subsection*{Game}
+$\A$ is playing to distinguish $F_3$ from a rnd function.
+\begin{itemize}
+  \item $\A$ chooses $x_1, x_2, x'_2 \in^R \{0, 1\}^n$, where $x_2 \neq x'_2$
+  \item Push $(x_1, x_2)$ to $\text{Oracle}$ to get $y = y_1 || y_2$, with each $y_i \in \{0, 1\}^{n}$
+  \item Push $(x_1, x'_2)$ to $\text{Oracle}$ to get $y' = y'_1 || y'_2$, with each $y'_i \in \{0, 1\}^{n}$
+  \item Now, check if $y_1 == y'_1$. This will set $\hat{b}$
+  \begin{itemize}
+    \item YES $\to 1$
+    \item ELSE $\to 0$
+  \end{itemize}
+  \item Return $\hat{b}$ to $\A$
+\end{itemize}
+
+\subsection*{Analysis}
+Let $\PRFadv[\A, F_3] = |\Pr[W_0] - \Pr[W_1]|$ be the magnitude of difference of $\A$ outputting $1$ in either experiments $0, 1$.
+
+\paragraph{$\exp 0$: Using $F_2$}
+Assume that the challenger chooses $k_1, k_2 \in^R \{0, 1\}^n$. In this experiment, the oracle is $F_3$. Note how, in both outputs of $y$, we're using $x_1$. That then means that both $y_1, y'_1$ are dependent on $x_1$. Therefore, it should be the case that $y_1 = y'_1$, and $\hat{b} = 1$ always occurs.
+
+\paragraph{$\exp 1$: Using rnd}
+Now, the oracle is just a rnd func $R$. This then means that both outputs of both $y$'s bits are uniformly distributed and random to ANY of $x_i$'s bits. Thus, the chance of $\hat{b} = 1$ occuring is $\frac{1}{2^n}$.
+
+\subsection*{Adv}
+Thus, the advantage for this game can be calculated as:
+\begin{equation*}
+  \PRFadv[\A, F_2] = |1 - \frac{1}{2^n}| \approx 1
+\end{equation*}
+$\frac{1}{2^n}$ approaches negligiblity as $n$ increases. A negligible minus a non-negligible is non-neglibile (the result is a constant, in simpler terms). Thus, this is non-negligible, meaning that $F_3$ is insecure. $\qed$
+\end{solution}
+
+
+\begin{ppart} (10 points)
+Define $F_4$  for $2n$-bit keys, $2n$-bit inputs, and $n$-bit outputs, as follows: 
+\[
+F_4((k_1, k_2), (x_1, x_2))=F(k_1, x_1)\oplus F(k_2, x_2)\,.
+\]
+Prove that $F_4$ is insecure.
+\end{ppart}
+
+\begin{solution}
+The issue, like before, is the fact that sections of the output are dependent on sections of the input, allowing an adversary to modify inputs to find a pattern. It's a bit harder for this case tho, but XORs can be cancelled out.
+
+\subsection*{Game}
+$\A$ is playing to distinguish $F_4$ from a rnd function.
+\begin{itemize}
+  \item $\A$ chooses $x_1, x_2, x'_1, x'_2 \in^R \{0, 1\}^n$, where $x_1 \neq x'_1, x_2 \neq x'_2$
+  \item Push the following 4 inputs into $\text{Oracle}$ to get the following $y_i \in \{0, 1\}^n$:
+  \begin{itemize}
+    \item $(x_1, x_2) \to \text{Oracle} \to y_1$
+    \item $(x_1, x'_2) \to \text{Oracle} \to y_2$
+    \item $(x'_1, x'_2) \to \text{Oracle} \to y_3$
+    \item $(x'_1, x_2) \to \text{Oracle} \to y_4$
+  \end{itemize}
+  \item Now, check if $y_1 \oplus y_2 \oplus y_3 \oplus y_4 = \{0\}^n$. This will set $\hat{b}$
+  \begin{itemize}
+    \item YES $\to 1$
+    \item ELSE $\to 0$
+  \end{itemize}
+  \item Return $\hat{b}$ to $\A$
+\end{itemize}
+
+\subsection*{Analysis}
+Let $\PRFadv[\A, F_4] = |\Pr[W_0] - \Pr[W_1]|$ be the magnitude of difference of $\A$ outputting $1$ in either experiments $0, 1$.
+
+\paragraph{$\exp 0$: Using $F_2$}
+Assume that the challenger chooses $k_1, k_2 \in^R \{0, 1\}^n$. In this experiment, the oracle is $F_4$. Note the number of times each variables 
+$x_1, x_2, x'_1, x'_2$ appears in the equation of $y_1 \oplus y_2 \oplus y_3 \oplus y_4$ ($y_i = (x_{\text{smth}}) \oplus (x_{\text{smth}})$). What you'll find is that, 
+each of the following variable I have just listed out will come out EXACTLY TWICE.\\
+\indent Also note how many times $k_1, k_2$ appears in the same equation. As we're XORing 4 terms, these 2 variables appear an EVEN NUMBER of times. 
+By the properties of XOR, this then means that $y_1 \oplus y_2 \oplus y_3 \oplus y_4$ entirely cancels out to $0$. Therefore, $\hat{b} = 1$ always occurs.
+
+\paragraph{$\exp 1$: Using rnd}
+Now, the oracle is just a rnd func $R$. This means that each bit of each particular $y_i$ will be uniform and random to one another. However, I am not
+necessarily saying that each $y_i$ needs to have the same exact bit. $y_1 \oplus y_2 \oplus y_3 = z$ is random, so you could just simlify to check if
+$z \oplus y_4 = \{0\}^n$. As we're just checking if XORing a rnd value yields all $0$s, the chance of this happening is $\frac{1}{2^n}$.
+
+\subsection*{Adv}
+Thus, the advantage for this game can be calculated as:
+\begin{equation*}
+  \PRFadv[\A, F_4] = |1 - \frac{1}{2^n}| \approx 1
+\end{equation*}
+$\frac{1}{2^n}$ approaches negligiblity as $n$ increases. A negligible minus a non-negligible is non-neglibile (the result is a constant, in simpler terms). Thus, this is non-negligible, meaning that $F_4$ is insecure. $\qed$
+\end{solution}
+\end{problem}
+
+\begin{problem} (20 points)
+There are many PRF designs out there based on different assumptions. Suppose you aren't sure which ones are really secure and want to hedge your bets. In this problem, you will prove that you can take multiple different PRF designs and combine them  so that the result is secure as long as at least one them is secure. This type of risk reduction is called a PRF \emph{combiner}.  There are also combiners for other cryptographic primitives, like CPA-secure encryption, collision-resistant hashing, etc. In this problem, you will prove that XOR is a good PRF combiner.
+
+Let $F_1$ and $F_2$ be functions with $n$-bit keys, inputs, and outputs. Let $F((k_1, k_2), x) = F_1(k_1, x)\oplus F_2(k_2, x)$. Prove that if either $F_1$ or $F_2$ is a secure PRF, then $F$ is a secure PRF.  (In fact, it suffices to prove that if $F_1$ is secure than $F$ is secure, because the proof for $F_2$ is the same. So just prove it for $F_1$ to get full credit.)
+
+NB: your proof will, of course, proceed via a reduction. In your reduction, be sure to analyze two cases: when the $F_1$ adversary is in Experiment 0 of the PRF Attack Game (Game 4.2 in Section 4.4.1), you need to prove that the $F$ adversary is also seeing Experiment 0; when the $F_1$ adversary is in Experiment 1, you need to prove that the $F$ adversary is also seeing Experiment 1.
+ \end{problem}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+
+
+\begin{problem} (20 points, at 10 each)
+
+\begin{ppart}
+  Let $F:\K\times \X \rightarrow \Y$ with $\K=\X=\Y=\{0,1\}^\lambda$ be a secure PRF. Define $F^1(k, x)$ is follows: if $k=0^\lambda$, output $0^\lambda$; else output $F(k, x)$. Prove that $F^1$ is secure. Hint: use the Difference Lemma (Theorem 4.7 in Section 4.4.3).
+\end{ppart}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+
+ \begin{ppart} (10 points)
+Use the previous part to prove the following.  Let $H:\K\times \X \rightarrow \Y$ with $\K=\X=\Y=\{0,1\}^\lambda$ be a secure PRF. Define $H^1(k', x')$ as follows: set $k=x'$ and  $x=k'$; output $H(k, x)$ (that is, simply swap the key and the output). Prove that $H^1$ is not necessarily a secure PRF.
+ 
+ \end{ppart}
+\begin{solution}
+Your solution goes here
+\end{solution}
+ 
+\end{problem} 
+ 
+
+
+\begin{problem} (30 points, at 15 each) 
+Problem 5.3 from Section 5.8 of the Boneh + Shoup textbook. Specifically,
+
+\begin{ppart}
+Assume that $\E$ is CPA-secure and prove that $\E$ is Alt-CPA-secure.
+\end{ppart}
+
+\begin{ppart}
+Assume that $\E$ is Alt-CPA-secure and prove that $\E$ is CPA-secure.
+\end{ppart}
+
+
+Hint 1: Do these parts one a time, to avoid getting lost. Part (b) requires a hybrid argument with many hybrid points.
+
+Hint 2: The textbook presents the Alt-CPA definition as a single randomized experiment, with the bit $b$ chosen at random by the challenger, and the adversary is trying to guess b by outputting a matching $\hat b$. This definition style is called ``bit-guessing''; define 
+\[
+\AltCPAadv^*(\A, \E)=|\Pr[b=\hat b]-1/2|\,.
+\]
+This definition is equivalent to a two-experiment definition that we are more familiar with: one for $b=0$, and the other for $b=1$. In this view, there is no random choice of $b$, and we are not measuring whether $b=\hat b$; rather, we measure the probability difference between $p_0=\Pr[\hat b = 1]$ in Experiment $0$ and $p_1=\Pr[\hat b = 1]$ in Experiment 1; define 
+\[
+\AltCPAadv(\A, \E)=|p_1-p_0|\,.
+\]
+The two definitions are equivalent; this equivalence is shown in Section 2.2.5 in the textbook (in the context of semantic security, but it's the same for all other such definitions). It is easier to use $\CPAadv^*$ / $\AltCPAadv^*$ for part (a),  and $\CPAadv$ / $\AltCPAadv$ for part (b).
+\end{problem}
+
+\begin{solution}
+Your solution goes here
+\end{solution}
+
+\end{document}
