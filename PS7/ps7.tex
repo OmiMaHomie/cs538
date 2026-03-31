@@ -29,65 +29,57 @@ Show that this MAC system is insecure.
 \end{problem} 
   
 \begin{solution}
-The main issue with this MAC setup is primarily the way $F$ is setup in this system. Basically, the MAC reveals info about the hidden values to the adversary. 
-This can then be computed by the adversary to make up a new valid MAC.
+The main issue with this MAC setup is the separation of the nonce $r$ from the msg $m$ via XOR. Basically, the MAC reveals enough info about the hidden value $t = F(k, r)$ to allow an adv. to compute a new valid MAC for a different msg using the same nonce.
 
-\subsection*{Game}
-Let $\A$ be the efficent adv. attacking the MAC protocol. We are trying to make a game, such that the challenger outputs $\{V(k, \cdot, (\cdot, \cdot)) \rightarrow \text{ACCEPT}\}$ from $\A$'s input,
-when it shouldn't.
-
+\subsection*{Adversary $\A$}
+Let $\A$ be an efficent adv attacking the defined MAC protocol:
 \begin{itemize}
-    \item Challenger gives $\A$ access to the following Oracles:
-    \begin{itemize}
-        \item $S(k, \cdot)$
-        \item $V(k, \cdot, (\cdot, \cdot))$
-    \end{itemize}
-    \item $\A$ chooses rnd $m_1 \in M$.
-    \item $\A$ querys $S(k, m_1)$, recieves $(r_1, t_1)$.
-    \item $\A$ now chooses rnd $m_2 \in M \backslash m_1$.
-    \item $\A$ computes $t_2 = (t_1 \oplus \text{CRC32}(m_1)) \oplus \text{CRC32}(m_2)$
-    \item $\A$ queries $V(m_2, (r_1, t_2))$, gets $\{\text{ACCEPT, REJECT}\}$.
+    \item $\A$ chooses some rnd msg $m_1 \in \M$.
+    \item $\A$ queries the signing oracle $S(k, m_1)$, and gets $(r_1, t_1)$.
+    \item $\A$ then chooses a rnd msg $m_2 \in \M$ such that $m_2 \neq m_1$.
+    \item $\A$ then computes $t_2$:
+    \begin{equation*}
+        t_2 = t_1 \oplus \text{CRC32}(m_1) \oplus \text{CRC32}(m_2)
+    \end{equation*}
+    \item $\A$ outputs the candidate forgery $(m_2, (r_1, t_2))$.
 \end{itemize}
 
 \subsection*{Analysis}
-I'm calculating $\text{CMAadv}[\A, \text{MAC}] = |\Pr[W_0] - \Pr[W_1]|$, where $Pr[W_b]$ is just the chance that the game will output $\text{ACCEPT}$ in a particular game.
+Note that, in order for $\A$ to win, it must achieve the following properties:
+\begin{enumerate}
+    \item The msg, $m_2$, was never queried to the signing oracle.
+    \item The verification algorithm accepts the pair: $V(k, m_2, (r_1, t_2)) = \textsf{ACCEPT}$.
+\end{enumerate}
 
-\paragraph{Game 0 (rnd)} In this game, $S(k, \cdot)$ just outputs a rnd value $\in \{0, 1\}^{32}$. So the chances $V$ will actually work is just $2^{32}$. This is negligible.
+\paragraph{Freshness} By construction, $\A$ only queried $m_1$. Since $m_2 \neq m_1$, freshness is guaranteed.
 
-\paragraph{Game 1} Now we are analyzing the constructed game. Note what $\A$ recieves upon first query, $(r_1, t_1)$. $\A$ knows that $t_1 = F(k, r_1) \oplus \text{CRC32}(m_1)$. So then,
-$F(k, r_1) = t_1 \oplus \text{CRC32}(m_1)$. Then it is possible to calculate: 
-
+\paragraph{Validity} From the signing query, $\A$ knows that $t_1 = F(k, r_1) \oplus \text{CRC32}(m_1)$. 
+It is now possible to rearrange this, such that we can isolate the PRF output:
+\begin{equation*}
+    F(k, r_1) = t_1 \oplus \text{CRC32}(m_1)
+\end{equation*}
+Now, consider the verification equation for the forgery $(m_2, (r_1, t_2))$. The verifier checks if:
+\begin{equation*}
+    t_2 \stackrel{?}{=} F(k, r_1) \oplus \text{CRC32}(m_2)
+\end{equation*}
+By subbing the value of $t_2$, computed by $\A$:
 \begin{equation*}
     \begin{aligned}
-        t_2 &= (t_1 \oplus \text{CRC32}(m_1)) \oplus \text{CRC32}(m_2)\\
-        &= F(k, r_1) \oplus \text{CRC32}(m_2)
+        t_2 &= (t_1 \oplus \text{CRC32}(m_1)) \oplus \text{CRC32}(m_2) \\
+            &= F(k, r_1) \oplus \text{CRC32}(m_2)
     \end{aligned}
 \end{equation*}
+The equation holds perfectly. Therefore, $V$ will always output $\text{ACCEPT}$.
 
-\noindent Note how $V$ operates. If $\A$ were to now query the challenger with $(m_2, (r_1, t_2))$, $V$ is now checking if:
-
+\subsection*{End}
+Since $\A$ wins the game with probability 1:
 \begin{equation*}
-    \begin{aligned}
-        t_2 &= F(k, r_1) \oplus \text{CRC32}(m_2)\\
-        F(k, r_1) \oplus \text{CRC32}(m_2) &= F(k, r_1) \oplus \text{CRC32}(m_2)
-    \end{aligned}
+    \MACadv[\A, \text{MAC}] = 1
 \end{equation*}
-
-\noindent As both sides are exactly equal to one another, the challenger will always output $\text{ACCEPT}$ in this case.
-
-\subsection*{Analysis}
-Therefore, we get the following:
-\begin{equation*}
-    \begin{aligned}
-        \text{CMAadv}[\A, \text{MAC}] &= |\Pr[W_0] - \Pr[W_1]|\\
-        &= |\frac{1}{2^{32}} - 1|\\
-        &\approx 1
-    \end{aligned}
-\end{equation*}
-
-\noindent This is not negligible. Therefore this proves that the MAC protocol is insecure. $\qed$
+Since 1 is not negligible, this proves that the MAC protocol is insecure. $\qed$
 \end{solution}
-  
+
+
   
 \begin{problem} (30 points)
 We want to build a MAC system $\I$ using two MAC system $\I_1 = (S_1, V_1)$ and $\I_2 = (S_2, V_2)$, so that if at some time one of $\I_1$ or $\I_2$ is broken (but not both) then $\I$ is still secure.
@@ -165,8 +157,9 @@ Since, when $\A$ wins, $\B$ also wins, the advantage of $\B$ will be at least th
 \end{equation*}
 
 \noindent By our initial assumption, then $\B$ will therefore then be non-negligible. This proves the contrapositive, therefore proving the OG statement. $\qed$
-
 \end{solution}
+
+
 
 \ifsol\else\newpage\fi
 
@@ -208,6 +201,8 @@ Notice that $E'$ pads the plaintext with 120 bits of zeros. You may assume that 
 
 Prove that $\E'$ is not AE-secure.
 \end{problem}
+
+
 
 \begin{solution}
 This protocol's main issue is with WHERE the checksum check is placed for the decryption. At decryption, checksum is verified \textbf{before} the MAC, allowing an adversary to learn information about the plaintext before the MAC.
@@ -268,5 +263,7 @@ Since $\A$ can recover plaintext info with non-negligible adv using polynomial q
 
 \noindent This probability is \textbf{not negligible} (it is a constant). Therefore, $\E'$ is not AE-secure. $\qed$
 \end{solution}
+
+
 
 \end{document}

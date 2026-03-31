@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.19)  30 MAR 2026 20:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.19)  30 MAR 2026 21:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -858,35 +858,36 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxBiolinumT-TLF' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 40.
+LaTeX Font Info:    OMX-m encoding encountered on input line 34.
+LaTeX Font Info:    OMX-m encoding encountered on input line 34.
+LaTeX Font Info:    OMX-m encoding encountered on input line 34.
+LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 37.
  (/usr/share/texlive/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 40.
-LaTeX Font Info:    TS1-m encoding encountered on input line 40.
+(Font)              scaled to size 12.0pt on input line 37.
+LaTeX Font Info:    TS1-m encoding encountered on input line 37.
 
 
-Package mmap Warning: !!! No .cmap file found for TS1 !!!  on input line 40.
+Package mmap Warning: !!! No .cmap file found for TS1 !!!  on input line 37.
 
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxLibertineT-TLF' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sl' in size <12> not available
-(Font)              Font shape `T1/LinuxLibertineT-TLF/m/it' tried instead on input line 89.
+(Font)              Font shape `T1/LinuxLibertineT-TLF/m/it' tried instead on input line 80.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 12.0pt on input line 89.
+(Font)              scaled to size 12.0pt on input line 80.
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}
 
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}] [2] [3]
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 176.
-LaTeX Font Info:    OMX-m encoding encountered on input line 176.
-LaTeX Font Info:    OMX-m encoding encountered on input line 176.
-LaTeX Font Info:    OMX-m encoding encountered on input line 176.
+(Font)              scaled to size 10.0pt on input line 169.
+LaTeX Font Info:    OMX-m encoding encountered on input line 169.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 176.
+(Font)              scaled to size 7.0pt on input line 169.
  [4
 
 ] [5] [6] (./ps7.aux)
@@ -898,18 +899,18 @@ Package rerunfilecheck Info: File `ps7.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 35842 strings out of 476182
- 734476 string characters out of 5795595
- 1946975 words of memory out of 5000000
- 57008 multiletter control sequences out of 15000+600000
- 649913 words of font info for 178 fonts, out of 8000000 for 9000
+ 35863 strings out of 476182
+ 734856 string characters out of 5795595
+ 1944975 words of memory out of 5000000
+ 57024 multiletter control sequences out of 15000+600000
+ 651185 words of font info for 182 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  108i,19n,112p,1027b,1056s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on ps7.pdf (6 pages, 374126 bytes).
+Output written on ps7.pdf (6 pages, 372977 bytes).
 PDF statistics:
- 173 PDF objects out of 1000 (max. 8388607)
- 107 compressed objects within 2 object streams
- 26 named destinations out of 1000 (max. 500000)
- 54457 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 175 PDF objects out of 1000 (max. 8388607)
+ 109 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
+ 54969 words of extra memory for PDF output out of 61914 (max. 10000000)
 
