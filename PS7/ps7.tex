@@ -210,7 +210,63 @@ Prove that $\E'$ is not AE-secure.
 \end{problem}
 
 \begin{solution}
-Your solution goes here
+This protocol's main issue is with WHERE the checksum check is placed for the decryption. At decryption, checksum is verified \textbf{before} the MAC, allowing an adversary to learn information about the plaintext before the MAC.
+
+\subsection*{Idea}
+Note two key properties regarding this question:
+\begin{itemize}
+    \item \textbf{Checksum Before MAC:} $D'$ checks $x = \checksum(m \| t)$ before verifying $V(k_m, m, t)$. This means that a REJECT at the checksum stage reveals different information than a REJECT at the MAC stage.
+    \item \textbf{CBC Malleability:} Then, by the malleability of CBC blocks, it is possible to alter the ciphertext block $C_{i-1}$ such that it XORs the following modification into plaintext block $P_i$:
+    \begin{equation*}
+        P_i' = D(k_e, C_i) \oplus (C_{i-1} \oplus \Delta) = P_i \oplus \Delta
+    \end{equation*}
+\end{itemize}
+
+\subsection*{Game}
+Let $\A$ be an efficent adversary atking $\E'$:
+\begin{itemize}
+    \item When $\A$ requests an encryption of message $m$, it gets $c = (C_0, C_1, \ldots, C_{n-1}, C_n)$. It will then do the following:
+    \begin{itemize}
+        \item $C_{n-1}$ encrypts the MAC tag $t$.
+        \item $C_n$ encrypts the checksum $x \| 0^{120}$.
+    \end{itemize}
+    \item $\A$ will then make $c' = (C_0, C_1, \ldots, C_{n-1}, C_{n-1})$ (just replace the last block with the second-to-last block).
+    \item Now, $\A$ will send $c'$ to the decryption oracle.
+    \item Now, what $\A$ will do will depend on the timing of the decryption function:
+    \begin{itemize}
+        \item If the code sends REJECT at \textbf{checksum check} stage, $\A$ will output some guess about plaintext.
+        \item If a REJECT is sent at the \textbf{MAC check} stage (or accepts), $\A$ will then output a different guess.
+    \end{itemize}
+    \item $\A$ should run this entire game (with same message $m$) multiple times, in order to get fresh encs, with different IVs, to increase confidence.
+\end{itemize}
+
+\subsection*{Analysis}
+\paragraph{$c'$} When $c'$ is decrypted, the last plaintext block becomes:
+\begin{equation*}
+    P_n' = D(k_e, C_{n-1}) \oplus C_{n-2} = t \oplus C_{n-2}
+\end{equation*}
+
+\noindent CHECKSUM only passes iff the first byte of $P_n' == \checksum(m \| t)$. By the definition of $\E'$, this should only occur w/ probability $1/256$ (per query).
+
+\paragraph{Leak} If the oracle accepts (or reaches MAC verification), $\A$ then learns that:
+\begin{equation*}
+    \text{First byte of } (t \oplus C_{n-2}) = \checksum(m \| t)
+\end{equation*}
+
+\noindent Since $t = S(k_m, m)$ depends on $m$, this leaks info about the plaintext. By def of $\E'$, by around 256 queries, $\A$ should be able to recover one byte of $m$ with high probability:
+\begin{equation*}
+    \Pr[\text{success}] = 1 - \left(\frac{255}{256}\right)^{256} \approx 0.63
+\end{equation*}
+
+\paragraph{CCA-insecure} By repeating this process for different byte positions (9.4.2 describes this as just doing msg shifting iteratively), $\A$ should then be able to recover the entire plaintext $m$ eventually. This breaks IND-CCA security, implying that AE-security is also broken.
+
+\subsection*{End}
+Since $\A$ can recover plaintext info with non-negligible adv using polynomial queries:
+\begin{equation*}
+    \textsf{AEadv}[\A, \E'] \geq \frac{1}{256}
+\end{equation*}
+
+\noindent This probability is \textbf{not negligible} (it is a constant). Therefore, $\E'$ is not AE-secure. $\qed$
 \end{solution}
 
 \end{document}
