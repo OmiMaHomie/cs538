@@ -322,13 +322,18 @@ Note that the denominator is zero only when $c_2 \equiv_q a \cdot c_1$.
 Now, since $c_1$ is fixed and $c_2$ is drawn uniformly at rnd from $C$ (which is super-poly by assumption [Boneh-Shoup 19.1]), this event will occur with probability AT MOST $1/|C|$, which is negligible.
 Therefore, the verifier should be able to recover $\alpha$ with probability $\geq 1 - 1/|C|$.\\
 
+\newpage
 
 \noindent\textbf{Note}
 How this extraction works is pretty similar to the rewinding technique (Boneh-shoup 19.1).
 It basically shows how two accepting conversations, sharing the same $u_t$ but differing in challenges, is enough to compute the discrete log.\\
 
 \noindent
-$\alpha_{t,2} = a\cdot\alpha_{t,1}+b$ is enough to get rid of the unknown $\alpha_{t,1}$ algebraically, replacing the rewind with a direct sub.
+Basically, having an expression of this structure specfically:\\
+\begin{equation*}
+     \alpha_{t,2} = a\cdot\alpha_{t,1}+b
+\end{equation*}
+is enough to get rid of the unknown $\alpha_{t,1}$ algebraically, replacing the rewind with a direct sub.
 \end{solution}
 
 \end{document}
